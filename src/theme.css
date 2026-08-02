@@ -1,0 +1,159 @@
+/* Shared frosted surface — header and content use the same transparent layers */
+@define-color bg_glass alpha(#0d0f12, 0.55);
+@define-color bg_tab alpha(#1a1e24, 0.55);
+@define-color fg_primary #e6e8eb;
+@define-color fg_muted #8b929a;
+@define-color accent_green #3dd68c;
+@define-color accent_blue #6cb6ff;
+@define-color accent_purple #b794f6;
+@define-color border_subtle alpha(#ffffff, 0.10);
+
+/* Outer GDK surface must stay fully clear so rounded chrome can show through */
+window.terminal-window {
+  background-color: transparent;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+
+.window-chrome {
+  background-color: transparent;
+  border-radius: 16px;
+}
+
+.top-bar {
+  background-color: transparent;
+  background-image: none;
+  padding: 4px 8px;
+  min-height: 28px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.terminal-host {
+  background-color: transparent;
+  background-image: none;
+  padding: 4px 10px 10px 10px;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.tab-pill {
+  background-color: transparent;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 1px 6px;
+  color: @fg_muted;
+  min-height: 20px;
+}
+
+.tab-pill:hover {
+  background-color: alpha(@fg_primary, 0.08);
+  color: @fg_primary;
+}
+
+.tab-pill.active {
+  background-color: @bg_tab;
+  border-color: @accent_green;
+  color: @fg_primary;
+}
+
+.tab-pill label {
+  font-size: 10px;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+}
+
+.tab-dot {
+  min-width: 6px;
+  min-height: 6px;
+  border-radius: 999px;
+  background-color: @accent_green;
+}
+
+.tab-dot.blue {
+  background-color: @accent_blue;
+}
+
+.tab-dot.purple {
+  background-color: @accent_purple;
+}
+
+.tab-dot.green {
+  background-color: @accent_green;
+}
+
+.tab-close,
+.new-tab-btn,
+.menu-btn,
+.window-control {
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  color: @fg_muted;
+  min-width: 20px;
+  min-height: 20px;
+  padding: 0;
+}
+
+.tab-close:hover,
+.new-tab-btn:hover,
+.menu-btn:hover,
+.window-control:hover {
+  background-color: alpha(@fg_primary, 0.10);
+  color: @fg_primary;
+}
+
+.new-tab-btn {
+  background-color: @bg_tab;
+  border-radius: 6px;
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.window-controls {
+  margin-left: 4px;
+}
+
+.window-close-btn:hover {
+  background-color: alpha(#e35d6a, 0.85);
+  color: #ffffff;
+}
+
+.status-dot {
+  min-width: 6px;
+  min-height: 6px;
+  border-radius: 999px;
+  background-color: @accent_green;
+}
+
+vte-terminal {
+  padding: 4px;
+  background-color: transparent;
+}
+
+.terminal-paned > separator {
+  background-color: alpha(#ffffff, 0.10);
+  min-width: 5px;
+  min-height: 5px;
+}
+
+.terminal-paned > separator:hover {
+  background-color: alpha(@accent_green, 0.45);
+}
+
+popover.menu,
+popover contents {
+  background-color: alpha(#14171c, 0.92);
+  color: @fg_primary;
+  border: 1px solid @border_subtle;
+  border-radius: 10px;
+}
+
+popover.menu modelbutton {
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+popover.menu modelbutton:hover {
+  background-color: alpha(@accent_green, 0.15);
+}
