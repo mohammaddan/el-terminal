@@ -30,8 +30,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1785776053.5515003,
-    "ast_hash": "e0c69a962f017e27a3c85a9d5cec140f",
+    "mtime": 1785782697.351057,
+    "ast_hash": "70779dd55014956cf22a92099b9b40e6",
     "semantic_hash": ""
   },
   "src/chrome.rs": {
@@ -77,6 +77,11 @@
   "image2.png": {
     "mtime": 1785764246.830586,
     "ast_hash": "d4d44c7b03d85116b349344c016cf770",
+    "semantic_hash": ""
+  },
+  "image3.png": {
+    "mtime": 1785776865.6190937,
+    "ast_hash": "d77066abfb5983b4526a0ea5f8c2c894",
     "semantic_hash": ""
   }
 }

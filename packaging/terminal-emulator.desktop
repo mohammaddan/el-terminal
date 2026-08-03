@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Terminal Emulator
+Comment=Lightweight borderless terminal emulator (GTK4 + VTE)
+Exec=terminal-emulator
+Icon=utilities-terminal
+Terminal=false
+Categories=System;TerminalEmulator;
+StartupNotify=true

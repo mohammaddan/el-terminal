@@ -1,16 +1,16 @@
 # Graph Report - terminal-emulator  (2026-08-03)
 
 ## Corpus Check
-- 14 files · ~19,926 words
+- 14 files · ~25,443 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 252 nodes · 536 edges · 13 communities
+- 254 nodes · 538 edges · 13 communities
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `bb46e999`
+- Built from commit: `17aa888a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -40,12 +40,12 @@
 10. `build_ui()` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `run_shell_ask()` --calls--> `open_settings()`  [INFERRED]
-  src/ask.rs → src/app.rs
 - `AppState` --references--> `AskPanel`  [EXTRACTED]
   src/app.rs → src/ask.rs
 - `AppState` --references--> `AppSettings`  [EXTRACTED]
   src/app.rs → src/settings.rs
+- `run_shell_ask()` --calls--> `open_settings()`  [INFERRED]
+  src/ask.rs → src/app.rs
 - `run_shell_ask()` --references--> `AppSettings`  [EXTRACTED]
   src/ask.rs → src/settings.rs
 - `format_reply_for_terminal()` --references--> `AskReply`  [EXTRACTED]
@@ -70,15 +70,15 @@ Nodes (6): attach_context_menu(), install_window_actions(), ApplicationWindow, F
 
 ### Community 3 - "Rc"
 Cohesion: 0.11
-Nodes (21): AskPanel, build_ask_button(), clear_shell_input_line(), current_input_line(), extract_shell_ask_query(), extracts_after_bash_prompt(), extracts_after_oh_my_zsh_prompt(), extracts_hash_prefix() (+13 more)
+Nodes (22): open_settings(), AskPanel, build_ask_button(), clear_shell_input_line(), current_input_line(), extract_shell_ask_query(), extracts_after_bash_prompt(), extracts_after_oh_my_zsh_prompt() (+14 more)
 
 ### Community 4 - "Terminal Emulator"
-Cohesion: 0.33
-Nodes (5): Build & run, Dependencies, Features, Layout, Terminal Emulator
+Cohesion: 0.25
+Nodes (7): Ask AI setup, Build & run, Dependencies, Features, Layout, Shortcuts, Terminal Emulator
 
 ### Community 5 - "Tab"
-Cohesion: 0.11
-Nodes (45): Application, Cell, Orientation, Paned, active_terminal(), add_tab(), adjust_font_size(), apply_settings_to_all() (+37 more)
+Cohesion: 0.12
+Nodes (44): Application, Cell, Orientation, Paned, active_terminal(), add_tab(), adjust_font_size(), apply_settings_to_all() (+36 more)
 
 ### Community 6 - "build_ui"
 Cohesion: 0.16
@@ -101,23 +101,23 @@ Cohesion: 0.17
 Nodes (20): clip_output(), contains_any(), detect_kind(), detects_mysql_from_output(), detects_psql_from_title(), empty_hints_still_shell_when_shell_known(), EnvKind, file_uri_to_path() (+12 more)
 
 ## Knowledge Gaps
-- **4 isolated node(s):** `Features`, `Dependencies`, `Build & run`, `Layout`
+- **6 isolated node(s):** `Features`, `Shortcuts`, `Dependencies`, `Build & run`, `Ask AI setup` (+1 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `AppSettings` connect `hit_interactive_child` to `terminal_tab.rs`, `Rc`, `Tab`, `build_ui`?**
-  _High betweenness centrality (0.190) - this node is a cross-community bridge._
+  _High betweenness centrality (0.187) - this node is a cross-community bridge._
 - **Why does `TerminalContext` connect `env_context.rs` to `Rc`, `build_ui`?**
-  _High betweenness centrality (0.148) - this node is a cross-community bridge._
+  _High betweenness centrality (0.145) - this node is a cross-community bridge._
 - **Why does `AppState` connect `Tab` to `hit_interactive_child`, `Rc`?**
-  _High betweenness centrality (0.106) - this node is a cross-community bridge._
-- **What connects `Features`, `Dependencies`, `Build & run` to the rest of the system?**
-  _4 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.105) - this node is a cross-community bridge._
+- **What connects `Features`, `Shortcuts`, `Dependencies` to the rest of the system?**
+  _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Rc` be split into smaller, more focused modules?**
-  _Cohesion score 0.10810810810810811 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.10526315789473684 - nodes in this community are weakly interconnected._
 - **Should `Tab` be split into smaller, more focused modules?**
-  _Cohesion score 0.11304347826086956 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.11515151515151516 - nodes in this community are weakly interconnected._
 - **Should `blur.rs` be split into smaller, more focused modules?**
   _Cohesion score 0.13538461538461538 - nodes in this community are weakly interconnected._

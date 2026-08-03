@@ -3,6 +3,24 @@ name = "terminal-emulator"
 version = "0.1.0"
 edition = "2021"
 description = "Lightweight borderless terminal emulator (GTK4 + VTE)"
+license = "MIT"
+authors = ["mohammaddan"]
+homepage = "https://github.com/mohammaddan/el-terminal"
+repository = "https://github.com/mohammaddan/el-terminal"
+
+[package.metadata.deb]
+name = "terminal-emulator"
+maintainer = "mohammaddan <https://github.com/mohammaddan>"
+section = "utils"
+priority = "optional"
+extended-description = """\
+Lightweight borderless terminal emulator built with GTK4 and VTE. \
+Supports multi-tab sessions, split panes, themes, and optional Ask AI."""
+depends = "$auto"
+assets = [
+    ["target/release/terminal-emulator", "usr/bin/", "755"],
+    ["packaging/terminal-emulator.desktop", "usr/share/applications/", "644"],
+]
 
 [dependencies]
 gtk4 = "0.9"

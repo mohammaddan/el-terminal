@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "src/app.rs": {
-    "mtime": 1785775145.931236,
-    "ast_hash": "a3ac66b6a66e17cfba75bf28fda4fd89",
+    "mtime": 1785776778.0995245,
+    "ast_hash": "4fcab77e1c43b6c00cfe21b2a37afec7",
     "semantic_hash": ""
   },
   "src/context_menu.rs": {
@@ -25,13 +25,13 @@
     "semantic_hash": ""
   },
   "src/terminal_tab.rs": {
-    "mtime": 1785710581.5967948,
-    "ast_hash": "8c4dc03013a2789a850c0c5a9de75f1d",
+    "mtime": 1785776778.0995245,
+    "ast_hash": "ae5ccce83431f951f218d466b6d17fcd",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1785774089.2445278,
-    "ast_hash": "084b11846da83521e1119a148b3c428d",
+    "mtime": 1785776053.5515003,
+    "ast_hash": "e0c69a962f017e27a3c85a9d5cec140f",
     "semantic_hash": ""
   },
   "src/chrome.rs": {
@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "src/ask.rs": {
-    "mtime": 1785775606.5131266,
-    "ast_hash": "141484bfb978cc2765ac6ba8e7380f6f",
+    "mtime": 1785776778.0995245,
+    "ast_hash": "6eac40966d6ac015e912e0c0854fead1",
     "semantic_hash": ""
   },
   "src/llm.rs": {
