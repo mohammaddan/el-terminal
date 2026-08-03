@@ -83,5 +83,10 @@
     "mtime": 1785776865.6190937,
     "ast_hash": "d77066abfb5983b4526a0ea5f8c2c894",
     "semantic_hash": ""
+  },
+  ".github/workflows/release.yml": {
+    "mtime": 1785784178.8766565,
+    "ast_hash": "57f6638121eeabc0c3f124537263db0f",
+    "semantic_hash": ""
   }
 }
