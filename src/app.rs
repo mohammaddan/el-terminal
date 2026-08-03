@@ -1,5 +1,8 @@
+use crate::ask::{self, AskPanel};
 use crate::chrome;
 use crate::context_menu;
+use crate::settings::{AppSettings, FONT_SIZE_MAX, FONT_SIZE_MIN};
+use crate::settings_ui;
 use crate::tab_bar;
 use crate::terminal_tab;
 use gtk4::gdk::{self, Key, ModifierType};
@@ -7,8 +10,9 @@ use gtk4::gio;
 use gtk4::glib::{self, clone};
 use gtk4::prelude::*;
 use gtk4::{
-    Application, ApplicationWindow, Box as GtkBox, EventControllerKey, GestureClick, Orientation,
-    Overlay, Paned, Stack, StackTransitionType, Widget,
+    Application, ApplicationWindow, Box as GtkBox, EventControllerKey, EventControllerScroll,
+    EventControllerScrollFlags, GestureClick, Orientation, Overlay, Paned, Stack,
+    StackTransitionType, Widget,
 };
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
@@ -36,6 +40,8 @@ struct AppState {
     tabs: RefCell<Vec<Tab>>,
     next_id: Cell<u32>,
     active: Cell<usize>,
+    settings: RefCell<AppSettings>,
+    ask_panel: RefCell<Option<Rc<AskPanel>>>,
 }
 
 pub fn build_ui(app: &Application) {
@@ -72,6 +78,7 @@ pub fn build_ui(app: &Application) {
     tab_strip.set_halign(gtk4::Align::Start);
 
     let new_tab_btn = tab_bar::build_new_tab_button();
+    let ask_btn = ask::build_ask_button();
     let menu_btn = tab_bar::build_menu_button();
     let status_dot = tab_bar::build_status_dot();
     let (window_controls, minimize_btn, maximize_btn, close_win_btn) =
@@ -80,6 +87,7 @@ pub fn build_ui(app: &Application) {
     let right = GtkBox::new(Orientation::Horizontal, 6);
     right.set_halign(gtk4::Align::End);
     right.set_valign(gtk4::Align::Center);
+    right.append(&ask_btn);
     right.append(&menu_btn);
     right.append(&status_dot);
     right.append(&window_controls);
@@ -99,8 +107,17 @@ pub fn build_ui(app: &Application) {
     stack.set_vexpand(true);
     host.append(&stack);
 
+    // Content row: terminal host + Ask side panel
+    let content_row = GtkBox::new(Orientation::Horizontal, 0);
+    content_row.set_hexpand(true);
+    content_row.set_vexpand(true);
+    content_row.append(&host);
+
+    let ask_panel = AskPanel::build();
+    content_row.append(ask_panel.widget());
+
     root.append(&top_bar);
-    root.append(&host);
+    root.append(&content_row);
     overlay.add_overlay(&root);
 
     window.set_child(Some(&overlay));
@@ -123,7 +140,28 @@ pub fn build_ui(app: &Application) {
         tabs: RefCell::new(Vec::new()),
         next_id: Cell::new(0),
         active: Cell::new(0),
+        settings: RefCell::new(AppSettings::load()),
+        ask_panel: RefCell::new(Some(ask_panel.clone())),
     });
+
+    AskPanel::connect_ask(
+        &ask_panel,
+        clone!(
+            #[strong]
+            state,
+            move || state.settings.borrow().clone()
+        ),
+        clone!(
+            #[strong]
+            state,
+            move || active_terminal(&state)
+        ),
+        clone!(
+            #[strong]
+            state,
+            move || open_settings(&state)
+        ),
+    );
 
     install_drag(&top_bar, &state.window);
     install_menu(&menu_btn, &state);
@@ -139,6 +177,10 @@ pub fn build_ui(app: &Application) {
     {
         let s = state.clone();
         new_tab_btn.connect_clicked(move |_| add_tab(&s));
+    }
+    {
+        let s = state.clone();
+        ask_btn.connect_clicked(move |_| toggle_ask(&s));
     }
 
     add_tab(&state);
@@ -196,6 +238,7 @@ fn hit_interactive_child(top_bar: &impl IsA<gtk4::Widget>, x: f64, y: f64) -> bo
             || widget.has_css_class("tab-close")
             || widget.has_css_class("new-tab-btn")
             || widget.has_css_class("menu-btn")
+            || widget.has_css_class("ask-btn")
             || widget.has_css_class("status-dot")
             || widget.has_css_class("window-control")
             || widget.has_css_class("window-controls")
@@ -270,6 +313,8 @@ fn install_menu(menu_btn: &gtk4::Button, state: &Rc<AppState>) {
     menu.append(Some("Close Tab"), Some("win.close-tab"));
     menu.append(Some("Split Right"), Some("win.split-right"));
     menu.append(Some("Split Down"), Some("win.split-down"));
+    menu.append(Some("Ask…"), Some("win.ask"));
+    menu.append(Some("Settings…"), Some("win.settings"));
     menu.append(Some("Quit"), Some("win.quit"));
 
     let popover = gtk4::PopoverMenu::from_model(Some(&menu));
@@ -291,6 +336,22 @@ fn install_menu(menu_btn: &gtk4::Button, state: &Rc<AppState>) {
         window.close();
     });
     state.window.add_action(&quit);
+
+    let settings_action = gio::SimpleAction::new("settings", None);
+    settings_action.connect_activate(clone!(
+        #[strong]
+        state,
+        move |_, _| open_settings(&state)
+    ));
+    state.window.add_action(&settings_action);
+
+    let ask_action = gio::SimpleAction::new("ask", None);
+    ask_action.connect_activate(clone!(
+        #[strong]
+        state,
+        move |_, _| toggle_ask(&state)
+    ));
+    state.window.add_action(&ask_action);
 }
 
 fn install_actions(state: &Rc<AppState>) {
@@ -361,6 +422,8 @@ fn install_shortcuts(app: &Application, state: &Rc<AppState>) {
     // Closes the focused pane; closes the tab when only one pane remains.
     app.set_accels_for_action("win.close-pane", &["<Control><Shift>w"]);
     app.set_accels_for_action("win.quit", &["<Control><Shift>q"]);
+    app.set_accels_for_action("win.settings", &["<Control><Shift>comma"]);
+    app.set_accels_for_action("win.ask", &["<Control><Shift>slash"]);
 
     // Ensure VTE doesn't swallow Ctrl+Shift shortcuts before window actions.
     let controller = EventControllerKey::new();
@@ -413,11 +476,77 @@ fn install_shortcuts(app: &Application, state: &Rc<AppState>) {
                     state.window.close();
                     glib::Propagation::Stop
                 }
+                Key::comma => {
+                    open_settings(&state);
+                    glib::Propagation::Stop
+                }
+                Key::slash | Key::question => {
+                    toggle_ask(&state);
+                    glib::Propagation::Stop
+                }
                 _ => glib::Propagation::Proceed,
             }
         }
     ));
     state.window.add_controller(controller);
+}
+
+fn open_settings(state: &Rc<AppState>) {
+    let current = state.settings.borrow().clone();
+    settings_ui::open_settings_dialog(
+        &state.window,
+        &current,
+        clone!(
+            #[strong]
+            state,
+            move |new_settings| {
+                if let Err(err) = new_settings.save() {
+                    eprintln!("failed to save settings: {err}");
+                }
+                *state.settings.borrow_mut() = new_settings;
+                apply_settings_to_all(&state);
+            }
+        ),
+    );
+}
+
+fn toggle_ask(state: &AppState) {
+    if let Some(panel) = state.ask_panel.borrow().as_ref() {
+        panel.toggle();
+    }
+}
+
+fn apply_settings_to_all(state: &AppState) {
+    let settings = state.settings.borrow().clone();
+    let tabs = state.tabs.borrow();
+    for tab in tabs.iter() {
+        for pane in &tab.panes {
+            terminal_tab::apply_font(&pane.terminal, &settings);
+            terminal_tab::apply_palette(&pane.terminal, &settings.theme);
+        }
+    }
+}
+
+fn adjust_font_size(state: &AppState, delta: i32) {
+    let mut settings = state.settings.borrow_mut();
+    let next = (settings.font_size as i32 + delta).clamp(FONT_SIZE_MIN as i32, FONT_SIZE_MAX as i32)
+        as u32;
+    if next == settings.font_size {
+        return;
+    }
+    settings.font_size = next;
+    let snapshot = settings.clone();
+    drop(settings);
+    if let Err(err) = snapshot.save() {
+        eprintln!("failed to save settings: {err}");
+    }
+    *state.settings.borrow_mut() = snapshot.clone();
+    let tabs = state.tabs.borrow();
+    for tab in tabs.iter() {
+        for pane in &tab.panes {
+            terminal_tab::apply_font(&pane.terminal, &snapshot);
+        }
+    }
 }
 
 fn active_terminal(state: &AppState) -> Option<Terminal> {
@@ -442,7 +571,7 @@ fn add_tab(state: &Rc<AppState>) {
     let accent = terminal_tab::ACCENT_CLASSES[(id as usize) % terminal_tab::ACCENT_CLASSES.len()];
 
     let pane_id = next_id(state);
-    let terminal = terminal_tab::create_terminal();
+    let terminal = terminal_tab::create_terminal(&state.settings.borrow());
     let title = terminal_tab::default_title();
 
     let (pill, label, close_btn) = tab_bar::build_tab_pill(&title, accent, false);
@@ -556,6 +685,75 @@ fn wire_pane(state: &Rc<AppState>, tab_name: &str, pane_id: u32, terminal: &Term
             close_pane_by_id(&s, &name_c, pid);
         });
     }
+
+    // Ctrl+scroll adjusts font size without stealing normal scrollback.
+    let scroll = EventControllerScroll::new(
+        EventControllerScrollFlags::VERTICAL | EventControllerScrollFlags::DISCRETE,
+    );
+    scroll.set_propagation_phase(gtk4::PropagationPhase::Capture);
+    scroll.connect_scroll(clone!(
+        #[strong]
+        state,
+        move |controller, _dx, dy| {
+            let Some(event) = controller.current_event() else {
+                return glib::Propagation::Proceed;
+            };
+            if !event.modifier_state().contains(ModifierType::CONTROL_MASK) {
+                return glib::Propagation::Proceed;
+            }
+            let delta = if dy < 0.0 {
+                1
+            } else if dy > 0.0 {
+                -1
+            } else {
+                return glib::Propagation::Proceed;
+            };
+            adjust_font_size(&state, delta);
+            glib::Propagation::Stop
+        }
+    ));
+    terminal.add_controller(scroll);
+
+    // In-shell Ask: type `<prefix> question` (default `??`) and press Enter.
+    let ask_keys = EventControllerKey::new();
+    ask_keys.set_propagation_phase(gtk4::PropagationPhase::Capture);
+    ask_keys.connect_key_pressed(clone!(
+        #[strong]
+        state,
+        #[strong]
+        terminal,
+        move |_, key, _code, _mods| {
+            if key != Key::Return && key != Key::KP_Enter {
+                return glib::Propagation::Proceed;
+            }
+
+            let Some(line) = ask::current_input_line(&terminal) else {
+                return glib::Propagation::Proceed;
+            };
+            let prefix = state.settings.borrow().ask_prefix.clone();
+            let Some(question) = ask::extract_shell_ask_query(&line, &prefix) else {
+                return glib::Propagation::Proceed;
+            };
+
+            // Don't send Enter to the shell — clear the typed Ask line instead.
+            ask::clear_shell_input_line(&terminal);
+
+            let settings = state.settings.borrow().clone();
+            ask::run_shell_ask(
+                &terminal,
+                &question,
+                &settings,
+                clone!(
+                    #[strong]
+                    state,
+                    move || open_settings(&state)
+                ),
+            );
+
+            glib::Propagation::Stop
+        }
+    ));
+    terminal.add_controller(ask_keys);
 }
 
 fn focus_pane_terminal(state: &AppState, terminal: &Terminal) {
@@ -623,7 +821,7 @@ fn split_active(state: &Rc<AppState>, orientation: Orientation) {
     };
 
     let new_pane_id = next_id(state);
-    let new_terminal = terminal_tab::create_terminal();
+    let new_terminal = terminal_tab::create_terminal(&state.settings.borrow());
 
     let paned = Paned::new(orientation);
     paned.add_css_class("terminal-paned");

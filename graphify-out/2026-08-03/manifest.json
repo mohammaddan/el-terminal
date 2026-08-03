@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "src/app.rs": {
-    "mtime": 1785709640.542148,
-    "ast_hash": "b2d49562cd369897f9d8a2bbd7416ace",
+    "mtime": 1785775145.931236,
+    "ast_hash": "a3ac66b6a66e17cfba75bf28fda4fd89",
     "semantic_hash": ""
   },
   "src/context_menu.rs": {
@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "src/main.rs": {
-    "mtime": 1785709638.2431567,
-    "ast_hash": "27a1888159ee32a134c9a404b298bf53",
+    "mtime": 1785763129.1426637,
+    "ast_hash": "1848cb3dad967773fe01cb5184990456",
     "semantic_hash": ""
   },
   "src/tab_bar.rs": {
@@ -25,23 +25,58 @@
     "semantic_hash": ""
   },
   "src/terminal_tab.rs": {
-    "mtime": 1785705299.178759,
-    "ast_hash": "02d6d9939b54e24e004c0411dd098844",
+    "mtime": 1785710581.5967948,
+    "ast_hash": "8c4dc03013a2789a850c0c5a9de75f1d",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1785709717.406865,
-    "ast_hash": "d9d0208e1c6b70e7487757a41d46d2f2",
+    "mtime": 1785774089.2445278,
+    "ast_hash": "084b11846da83521e1119a148b3c428d",
     "semantic_hash": ""
   },
   "src/chrome.rs": {
-    "mtime": 1785709640.6257615,
-    "ast_hash": "16b4764cdc1d4210537e2ce4c76a0b0b",
+    "mtime": 1785709880.9392703,
+    "ast_hash": "c18906abfd1abf4f2e165fddcd5bab63",
     "semantic_hash": ""
   },
   "src/blur.rs": {
     "mtime": 1785709708.8791702,
     "ast_hash": "d1581c609c98853c1563a5cb6347c01b",
+    "semantic_hash": ""
+  },
+  "src/ask.rs": {
+    "mtime": 1785775606.5131266,
+    "ast_hash": "141484bfb978cc2765ac6ba8e7380f6f",
+    "semantic_hash": ""
+  },
+  "src/llm.rs": {
+    "mtime": 1785763769.912107,
+    "ast_hash": "762855927d161006154b5b7d314ba51d",
+    "semantic_hash": ""
+  },
+  "src/settings.rs": {
+    "mtime": 1785764892.5419178,
+    "ast_hash": "c56a1d65ef181151b15ec159739269b7",
+    "semantic_hash": ""
+  },
+  "src/settings_ui.rs": {
+    "mtime": 1785766034.3408296,
+    "ast_hash": "c2da9b24cfda87160dbf5e4c0bb877b4",
+    "semantic_hash": ""
+  },
+  "src/env_context.rs": {
+    "mtime": 1785763759.3132107,
+    "ast_hash": "f502003bbeaf81f9a1188709741ad273",
+    "semantic_hash": ""
+  },
+  "image.png": {
+    "mtime": 1785764194.540658,
+    "ast_hash": "fa730a2ef6621b2651213eb4c695a685",
+    "semantic_hash": ""
+  },
+  "image2.png": {
+    "mtime": 1785764246.830586,
+    "ast_hash": "d4d44c7b03d85116b349344c016cf770",
     "semantic_hash": ""
   }
 }

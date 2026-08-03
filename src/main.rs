@@ -1,7 +1,12 @@
 mod app;
+mod ask;
 mod blur;
 mod chrome;
 mod context_menu;
+mod env_context;
+mod llm;
+mod settings;
+mod settings_ui;
 mod tab_bar;
 mod terminal_tab;
 

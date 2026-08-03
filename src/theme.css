@@ -85,6 +85,7 @@ window.terminal-window {
 .tab-close,
 .new-tab-btn,
 .menu-btn,
+.ask-btn,
 .window-control {
   background: transparent;
   border: none;
@@ -98,8 +99,19 @@ window.terminal-window {
 .tab-close:hover,
 .new-tab-btn:hover,
 .menu-btn:hover,
+.ask-btn:hover,
 .window-control:hover {
   background-color: alpha(@fg_primary, 0.10);
+  color: @fg_primary;
+}
+
+.ask-btn {
+  background-color: @bg_tab;
+  border-radius: 6px;
+  padding: 0 8px;
+  min-width: 36px;
+  font-size: 11px;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
   color: @fg_primary;
 }
 
@@ -156,4 +168,142 @@ popover.menu modelbutton {
 
 popover.menu modelbutton:hover {
   background-color: alpha(@accent_green, 0.15);
+}
+
+/* Settings dialog */
+.settings-dialog {
+  background-color: alpha(#14171c, 0.96);
+  color: @fg_primary;
+  border-radius: 12px;
+}
+
+.settings-section {
+  font-weight: 600;
+  font-size: 13px;
+  color: @fg_primary;
+}
+
+.settings-label {
+  color: @fg_muted;
+  font-size: 12px;
+}
+
+.settings-hint {
+  color: @fg_muted;
+  font-size: 11px;
+}
+
+.settings-btn {
+  background-color: alpha(@fg_primary, 0.08);
+  border: 1px solid @border_subtle;
+  border-radius: 6px;
+  color: @fg_primary;
+  padding: 4px 12px;
+  min-height: 28px;
+}
+
+.settings-btn:hover {
+  background-color: alpha(@fg_primary, 0.14);
+}
+
+.settings-btn-primary {
+  background-color: alpha(@accent_green, 0.25);
+  border-color: alpha(@accent_green, 0.45);
+}
+
+.settings-btn-primary:hover {
+  background-color: alpha(@accent_green, 0.35);
+}
+
+/* Ask side panel */
+.ask-panel {
+  background-color: alpha(#12151a, 0.92);
+  border-left: 1px solid @border_subtle;
+  border-bottom-right-radius: 16px;
+  padding: 10px 12px 12px 12px;
+  min-width: 280px;
+  max-width: 360px;
+}
+
+.ask-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: @fg_primary;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+}
+
+.ask-close {
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  color: @fg_muted;
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.ask-close:hover {
+  background-color: alpha(@fg_primary, 0.10);
+  color: @fg_primary;
+}
+
+.ask-prompt-scroll {
+  border: 1px solid @border_subtle;
+  border-radius: 8px;
+  background-color: alpha(#0d0f12, 0.55);
+}
+
+.ask-prompt {
+  background-color: transparent;
+  color: @fg_primary;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 12px;
+  padding: 6px;
+}
+
+.ask-submit,
+.ask-apply {
+  background-color: alpha(@accent_green, 0.22);
+  border: 1px solid alpha(@accent_green, 0.4);
+  border-radius: 6px;
+  color: @fg_primary;
+  padding: 4px 12px;
+  min-height: 26px;
+}
+
+.ask-submit:hover,
+.ask-apply:hover {
+  background-color: alpha(@accent_green, 0.35);
+}
+
+.ask-status {
+  color: @fg_muted;
+  font-size: 11px;
+}
+
+.ask-text {
+  font-size: 12px;
+  color: @fg_muted;
+  line-height: 1.35;
+}
+
+.ask-command-row {
+  background-color: alpha(@fg_primary, 0.05);
+  border: 1px solid @border_subtle;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.ask-command-text {
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 11px;
+  color: @fg_primary;
+}
+
+.ask-run {
+  background-color: alpha(@accent_blue, 0.22);
+  border-color: alpha(@accent_blue, 0.4);
+}
+
+.ask-run:hover {
+  background-color: alpha(@accent_blue, 0.35);
 }

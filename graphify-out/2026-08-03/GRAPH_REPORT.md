@@ -1,13 +1,18 @@
 # Graph Report - terminal-emulator  (2026-08-03)
 
 ## Corpus Check
-- 9 files · ~4,149 words
+- 14 files · ~19,658 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 119 nodes · 221 edges · 14 communities
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
+- 249 nodes · 525 edges · 13 communities
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 1 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `bb46e999`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - [[_COMMUNITY_terminal_tab.rs|terminal_tab.rs]]
@@ -20,41 +25,40 @@
 - [[_COMMUNITY_blur.rs|blur.rs]]
 - [[_COMMUNITY_app.rs|app.rs]]
 - [[_COMMUNITY_hit_interactive_child|hit_interactive_child]]
-- [[_COMMUNITY_Rc|Rc]]
-- [[_COMMUNITY_add_tab|add_tab]]
+- [[_COMMUNITY_env_context.rs|env_context.rs]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `AppState` - 24 edges
-2. `Tab` - 9 edges
-3. `BlurState` - 9 edges
-4. `build_ui()` - 8 edges
-5. `add_tab()` - 8 edges
-6. `close_tab_by_name()` - 8 edges
-7. `wire_pane()` - 7 edges
-8. `split_active()` - 7 edges
-9. `BlurDispatch` - 7 edges
-10. `close_pane_by_id()` - 6 edges
+1. `AppState` - 32 edges
+2. `AppSettings` - 21 edges
+3. `AskPanel` - 19 edges
+4. `parse_reply()` - 13 edges
+5. `TerminalContext` - 10 edges
+6. `ask()` - 10 edges
+7. `parse_commands()` - 10 edges
+8. `extract_assistant_content()` - 10 edges
+9. `Tab` - 9 edges
+10. `build_ui()` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Tab` --references--> `Pane`  [EXTRACTED]
-  src/app.rs → src/app.rs  _Bridges community 3 → community 9_
-- `wire_pane()` --references--> `Terminal`  [EXTRACTED]
-  src/app.rs →   _Bridges community 3 → community 13_
-- `AppState` --references--> `Tab`  [EXTRACTED]
-  src/app.rs → src/app.rs  _Bridges community 9 → community 5_
-- `active_terminal()` --references--> `AppState`  [EXTRACTED]
-  src/app.rs → src/app.rs  _Bridges community 5 → community 3_
-- `add_tab()` --references--> `AppState`  [EXTRACTED]
-  src/app.rs → src/app.rs  _Bridges community 5 → community 14_
+- `AppState` --references--> `AskPanel`  [EXTRACTED]
+  src/app.rs → src/ask.rs
+- `AppState` --references--> `AppSettings`  [EXTRACTED]
+  src/app.rs → src/settings.rs
+- `ask()` --references--> `TerminalContext`  [EXTRACTED]
+  src/llm.rs → src/env_context.rs
+- `ask()` --references--> `AppSettings`  [EXTRACTED]
+  src/llm.rs → src/settings.rs
+- `apply_font()` --references--> `AppSettings`  [EXTRACTED]
+  src/terminal_tab.rs → src/settings.rs
 
 ## Import Cycles
 - None detected.
 
-## Communities (14 total, 0 thin omitted)
+## Communities (13 total, 0 thin omitted)
 
 ### Community 0 - "terminal_tab.rs"
-Cohesion: 0.26
-Nodes (14): Path, RGBA, apply_palette(), copy_selection(), create_terminal(), default_title(), parse_rgba(), paste_clipboard() (+6 more)
+Cohesion: 0.20
+Nodes (18): Path, RGBA, RgbaF, apply_font(), apply_palette(), copy_selection(), create_terminal(), default_title() (+10 more)
 
 ### Community 1 - "tab_bar.rs"
 Cohesion: 0.36
@@ -62,23 +66,23 @@ Nodes (8): build_menu_button(), build_new_tab_button(), build_status_dot(), buil
 
 ### Community 2 - "attach_context_menu"
 Cohesion: 0.33
-Nodes (6): Fn, attach_context_menu(), install_window_actions(), ApplicationWindow, IsA, Widget
+Nodes (6): attach_context_menu(), install_window_actions(), ApplicationWindow, Fn, IsA, Widget
 
 ### Community 3 - "Rc"
-Cohesion: 0.48
-Nodes (6): active_terminal(), focus_pane_terminal(), Pane, Option, Terminal, select_tab_by_name()
+Cohesion: 0.11
+Nodes (19): AskPanel, build_ask_button(), clear_shell_input_line(), current_input_line(), extract_shell_ask_query(), extracts_after_bash_prompt(), extracts_after_oh_my_zsh_prompt(), extracts_hash_prefix() (+11 more)
 
 ### Community 4 - "Terminal Emulator"
 Cohesion: 0.33
 Nodes (5): Build & run, Dependencies, Features, Layout, Terminal Emulator
 
 ### Community 5 - "Tab"
-Cohesion: 0.29
-Nodes (8): Cell, AppState, focus_pane_in_tab(), install_drag(), ApplicationWindow, GtkBox, RefCell, Stack
+Cohesion: 0.11
+Nodes (45): Application, Cell, Orientation, Paned, active_terminal(), add_tab(), adjust_font_size(), apply_settings_to_all() (+37 more)
 
 ### Community 6 - "build_ui"
-Cohesion: 0.38
-Nodes (7): Application, build_ui(), install_actions(), install_menu(), install_shortcuts(), install_window_controls(), Button
+Cohesion: 0.16
+Nodes (33): ApiError, ask(), AskReply, assemble_sse_content(), ChatChoice, ChatMessage, ChatReply, ChatRequest (+25 more)
 
 ### Community 7 - "blur.rs"
 Cohesion: 0.14
@@ -89,16 +93,12 @@ Cohesion: 0.31
 Nodes (9): Context, DrawingArea, ImageSurface, build_chrome_background(), build_noise_surface(), hash2(), NoiseCache, rounded_rect() (+1 more)
 
 ### Community 9 - "hit_interactive_child"
-Cohesion: 0.29
-Nodes (7): hit_interactive_child(), IsA, Label, String, Widget, Tab, Vec
+Cohesion: 0.13
+Nodes (15): PathBuf, AppSettings, default_ask_prefix(), Default, Result, Self, String, labeled_row() (+7 more)
 
-### Community 13 - "Rc"
-Cohesion: 0.52
-Nodes (7): close_active_pane(), close_active_tab(), close_pane_by_id(), close_tab_by_name(), reset_last_tab(), Rc, wire_pane()
-
-### Community 14 - "add_tab"
-Cohesion: 0.40
-Nodes (6): Orientation, Paned, add_tab(), balance_paned(), next_id(), split_active()
+### Community 12 - "env_context.rs"
+Cohesion: 0.17
+Nodes (20): clip_output(), contains_any(), detect_kind(), detects_mysql_from_output(), detects_psql_from_title(), empty_hints_still_shell_when_shell_known(), EnvKind, file_uri_to_path() (+12 more)
 
 ## Knowledge Gaps
 - **4 isolated node(s):** `Features`, `Dependencies`, `Build & run`, `Layout`
@@ -107,11 +107,17 @@ Nodes (6): Orientation, Paned, add_tab(), balance_paned(), next_id(), split_acti
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `AppState` connect `Tab` to `Rc`, `build_ui`, `hit_interactive_child`, `Rc`, `add_tab`?**
-  _High betweenness centrality (0.057) - this node is a cross-community bridge._
-- **Why does `Tab` connect `hit_interactive_child` to `Rc`, `Tab`?**
-  _High betweenness centrality (0.037) - this node is a cross-community bridge._
+- **Why does `AppSettings` connect `hit_interactive_child` to `terminal_tab.rs`, `Rc`, `Tab`, `build_ui`?**
+  _High betweenness centrality (0.191) - this node is a cross-community bridge._
+- **Why does `TerminalContext` connect `env_context.rs` to `Rc`, `build_ui`?**
+  _High betweenness centrality (0.149) - this node is a cross-community bridge._
+- **Why does `AppState` connect `Tab` to `hit_interactive_child`, `Rc`?**
+  _High betweenness centrality (0.109) - this node is a cross-community bridge._
 - **What connects `Features`, `Dependencies`, `Build & run` to the rest of the system?**
   _4 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Rc` be split into smaller, more focused modules?**
+  _Cohesion score 0.11092436974789915 - nodes in this community are weakly interconnected._
+- **Should `Tab` be split into smaller, more focused modules?**
+  _Cohesion score 0.11304347826086956 - nodes in this community are weakly interconnected._
 - **Should `blur.rs` be split into smaller, more focused modules?**
   _Cohesion score 0.13538461538461538 - nodes in this community are weakly interconnected._

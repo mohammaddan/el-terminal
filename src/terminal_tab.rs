@@ -1,3 +1,4 @@
+use crate::settings::AppSettings;
 use gtk4::gdk::RGBA;
 use gtk4::gio;
 use gtk4::prelude::*;
@@ -9,10 +10,7 @@ use vte4::{Format, PtyFlags, Terminal};
 /// Accent CSS classes cycling across tabs (green / blue / purple).
 pub const ACCENT_CLASSES: [&str; 3] = ["green", "blue", "purple"];
 
-/// Shared glass background (matches chrome fill).
-const GLASS_BG: (f32, f32, f32, f32) = (0.051, 0.059, 0.071, 0.55);
-
-pub fn create_terminal() -> Terminal {
+pub fn create_terminal(settings: &AppSettings) -> Terminal {
     let terminal = Terminal::new();
     terminal.set_hexpand(true);
     terminal.set_vexpand(true);
@@ -22,40 +20,69 @@ pub fn create_terminal() -> Terminal {
     terminal.set_cursor_blink_mode(vte4::CursorBlinkMode::On);
     terminal.set_clear_background(false);
 
-    let font = FontDescription::from_string(
-        "JetBrains Mono 11, Fira Code 11, Cascadia Code 11, monospace 11",
-    );
-    terminal.set_font(Some(&font));
-
-    apply_palette(&terminal);
+    apply_font(&terminal, settings);
+    apply_palette(&terminal, &settings.theme);
     spawn_shell(&terminal);
     terminal
 }
 
-pub fn apply_palette(terminal: &Terminal) {
-    let bg = RGBA::new(GLASS_BG.0, GLASS_BG.1, GLASS_BG.2, GLASS_BG.3);
-    let fg = parse_rgba("#e6e8eb");
+pub fn apply_font(terminal: &Terminal, settings: &AppSettings) {
+    let font = FontDescription::from_string(&settings.font_description());
+    terminal.set_font(Some(&font));
+}
 
-    let palette = [
-        parse_rgba("#0d0f12"), // 0 black
-        parse_rgba("#ff6b6b"), // 1 red
-        parse_rgba("#3dd68c"), // 2 green
-        parse_rgba("#e5c07b"), // 3 yellow
-        parse_rgba("#6cb6ff"), // 4 blue
-        parse_rgba("#b794f6"), // 5 magenta
-        parse_rgba("#56b6c2"), // 6 cyan
-        parse_rgba("#e6e8eb"), // 7 white
-        parse_rgba("#5c6370"), // 8 bright black
-        parse_rgba("#ff8787"), // 9 bright red
-        parse_rgba("#5eead4"), // 10 bright green
-        parse_rgba("#f0d78c"), // 11 bright yellow
-        parse_rgba("#89b4ff"), // 12 bright blue
-        parse_rgba("#c4b5fd"), // 13 bright magenta
-        parse_rgba("#67e8f9"), // 14 bright cyan
-        parse_rgba("#ffffff"), // 15 bright white
-    ];
+pub fn apply_palette(terminal: &Terminal, theme: &str) {
+    let (fg_hex, bg, palette_hex) = theme_colors(theme);
+    let fg = parse_rgba(fg_hex);
+    let bg = RGBA::new(bg.0, bg.1, bg.2, bg.3);
+
+    let palette: Vec<RGBA> = palette_hex.iter().map(|h| parse_rgba(h)).collect();
     let refs: Vec<&RGBA> = palette.iter().collect();
     terminal.set_colors(Some(&fg), Some(&bg), &refs);
+}
+
+type RgbaF = (f32, f32, f32, f32);
+
+fn theme_colors(theme: &str) -> (&'static str, RgbaF, [&'static str; 16]) {
+    match theme {
+        "nord" => (
+            "#d8dee9",
+            (0.180, 0.204, 0.251, 0.55), // #2e3440
+            [
+                "#3b4252", "#bf616a", "#a3be8c", "#ebcb8b", "#81a1c1", "#b48ead", "#88c0d0",
+                "#e5e9f0", "#4c566a", "#bf616a", "#a3be8c", "#ebcb8b", "#81a1c1", "#b48ead",
+                "#8fbcbb", "#eceff4",
+            ],
+        ),
+        "solarized-dark" => (
+            "#839496",
+            (0.000, 0.169, 0.212, 0.55), // #002b36
+            [
+                "#073642", "#dc322f", "#859900", "#b58900", "#268bd2", "#d33682", "#2aa198",
+                "#eee8d5", "#002b36", "#cb4b16", "#586e75", "#657b83", "#839496", "#6c71c4",
+                "#93a1a1", "#fdf6e3",
+            ],
+        ),
+        "light" => (
+            "#1a1d23",
+            (0.961, 0.965, 0.973, 0.85), // #f5f6f8
+            [
+                "#1a1d23", "#e35d6a", "#2f9e6e", "#b08900", "#3b82c4", "#8b6cc7", "#2a9d8f",
+                "#e6e8eb", "#6b7280", "#ef7a84", "#3dd68c", "#e5c07b", "#6cb6ff", "#b794f6",
+                "#56b6c2", "#ffffff",
+            ],
+        ),
+        // glass-dark (default)
+        _ => (
+            "#e6e8eb",
+            (0.051, 0.059, 0.071, 0.55), // #0d0f12
+            [
+                "#0d0f12", "#ff6b6b", "#3dd68c", "#e5c07b", "#6cb6ff", "#b794f6", "#56b6c2",
+                "#e6e8eb", "#5c6370", "#ff8787", "#5eead4", "#f0d78c", "#89b4ff", "#c4b5fd",
+                "#67e8f9", "#ffffff",
+            ],
+        ),
+    }
 }
 
 fn parse_rgba(hex: &str) -> RGBA {
@@ -98,6 +125,16 @@ pub fn copy_selection(terminal: &Terminal) {
 
 pub fn paste_clipboard(terminal: &Terminal) {
     terminal.paste_clipboard();
+}
+
+/// Paste text into the PTY without a trailing newline (user confirms with Enter).
+pub fn feed_text(terminal: &Terminal, text: &str) {
+    terminal.feed_child(text.as_bytes());
+}
+
+/// Write bytes to the terminal display as if from the child (does not send to the PTY).
+pub fn feed_output(terminal: &Terminal, text: &str) {
+    terminal.feed(text.as_bytes());
 }
 
 pub fn select_all(terminal: &Terminal) {
