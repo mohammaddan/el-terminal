@@ -1,31 +1,42 @@
 [package]
-name = "terminal-emulator"
-version = "0.1.1"
+name = "el-terminal"
+version = "0.2.0"
 edition = "2021"
-description = "Lightweight borderless terminal emulator (GTK4 + VTE)"
+description = "El-Terminal — lightweight borderless terminal emulator (GTK4 + VTE)"
 license = "MIT"
 authors = ["mohammaddan"]
 homepage = "https://github.com/mohammaddan/el-terminal"
 repository = "https://github.com/mohammaddan/el-terminal"
 
 [package.metadata.deb]
-name = "terminal-emulator"
+name = "el-terminal"
 maintainer = "mohammaddan <https://github.com/mohammaddan>"
 section = "utils"
 priority = "optional"
 extended-description = """\
-Lightweight borderless terminal emulator built with GTK4 and VTE. \
+El-Terminal is a lightweight borderless terminal emulator built with GTK4 and VTE. \
 Supports multi-tab sessions, split panes, themes, and optional Ask AI."""
 depends = "$auto"
+maintainer-scripts = "packaging/debian/"
 assets = [
     [
-        "target/release/terminal-emulator",
+        "target/release/el-terminal",
         "usr/bin/",
         "755",
     ],
     [
-        "packaging/terminal-emulator.desktop",
+        "packaging/el-terminal.desktop",
         "usr/share/applications/",
+        "644",
+    ],
+    [
+        "packaging/el-terminal.png",
+        "usr/share/icons/hicolor/512x512/apps/el-terminal.png",
+        "644",
+    ],
+    [
+        "packaging/el-terminal.png",
+        "usr/share/pixmaps/el-terminal.png",
         "644",
     ],
 ]

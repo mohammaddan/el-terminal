@@ -47,13 +47,14 @@ struct AppState {
 pub fn build_ui(app: &Application) {
     let window = ApplicationWindow::builder()
         .application(app)
-        .title("Terminal")
+        .title("El-Terminal")
         .default_width(960)
         .default_height(640)
         .decorated(false)
         .build();
     window.add_css_class("terminal-window");
     window.set_resizable(true);
+    window.set_icon_name(Some("el-terminal"));
 
     // Transparent outer surface; rounded frosted chrome is painted underneath.
     let overlay = Overlay::new();

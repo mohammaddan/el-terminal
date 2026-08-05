@@ -1,6 +1,6 @@
 ![Screenshot](image.png)
 
-# Terminal Emulator
+# El-Terminal
 
 Lightweight borderless terminal emulator for Linux (GTK4 + VTE), with optional OpenAI-compatible Ask AI.
 
@@ -23,7 +23,7 @@ Lightweight borderless terminal emulator for Linux (GTK4 + VTE), with optional O
 - Font family and size
 - OpenAI-compatible LLM: endpoint, API key, model
 - In-shell Ask prefix (default `??`)
-- Stored at `~/.config/terminal-emulator/settings.json`
+- Stored at `~/.config/el-terminal/settings.json`
 
 **Ask AI**
 - Side panel (toolbar **Ask** or `Ctrl+Shift+/`): prompt → reply; **Apply** / **Run** only on shell code blocks

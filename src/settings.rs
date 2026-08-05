@@ -85,7 +85,7 @@ impl AppSettings {
     pub fn config_path() -> PathBuf {
         dirs::config_dir()
             .unwrap_or_else(|| PathBuf::from("."))
-            .join("terminal-emulator")
+            .join("el-terminal")
             .join("settings.json")
     }
 

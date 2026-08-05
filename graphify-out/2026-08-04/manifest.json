@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "src/app.rs": {
-    "mtime": 1785792966.681731,
-    "ast_hash": "6c71c6102d7fa366246b267bd9b2d6e4",
+    "mtime": 1785776778.0995245,
+    "ast_hash": "4fcab77e1c43b6c00cfe21b2a37afec7",
     "semantic_hash": ""
   },
   "src/context_menu.rs": {
@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "src/main.rs": {
-    "mtime": 1785793196.3557794,
-    "ast_hash": "a465c52b95a35ad926b295798c8a5a5b",
+    "mtime": 1785763129.1426637,
+    "ast_hash": "1848cb3dad967773fe01cb5184990456",
     "semantic_hash": ""
   },
   "src/tab_bar.rs": {
@@ -30,8 +30,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1785792977.8790631,
-    "ast_hash": "7b76c1d062487f83bc3bd874ee63e951",
+    "mtime": 1785782697.351057,
+    "ast_hash": "70779dd55014956cf22a92099b9b40e6",
     "semantic_hash": ""
   },
   "src/chrome.rs": {
@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "src/ask.rs": {
-    "mtime": 1785792970.7162073,
-    "ast_hash": "924d2be5a9728d144b92456e3299a389",
+    "mtime": 1785776778.0995245,
+    "ast_hash": "6eac40966d6ac015e912e0c0854fead1",
     "semantic_hash": ""
   },
   "src/llm.rs": {
@@ -55,8 +55,8 @@
     "semantic_hash": ""
   },
   "src/settings.rs": {
-    "mtime": 1785792970.673202,
-    "ast_hash": "315679fc981794d38af23d76aef237ee",
+    "mtime": 1785764892.5419178,
+    "ast_hash": "c56a1d65ef181151b15ec159739269b7",
     "semantic_hash": ""
   },
   "src/settings_ui.rs": {
@@ -85,23 +85,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/release.yml": {
-    "mtime": 1785784871.2042437,
-    "ast_hash": "0297e451e1fa84eb79bd4ac0c25e9d0f",
-    "semantic_hash": ""
-  },
-  "packaging/debian/postinst": {
-    "mtime": 1785793208.8570294,
-    "ast_hash": "69971499bdf993f92cfb2b5a59c26114",
-    "semantic_hash": ""
-  },
-  "packaging/el-terminal.png": {
-    "mtime": 1785792949.5195122,
-    "ast_hash": "f9ab6932e6a7d9ff57a60ae0c7b715b8",
-    "semantic_hash": ""
-  },
-  "terminal-emulator-logo.png": {
-    "mtime": 1785785607.4410486,
-    "ast_hash": "f9ab6932e6a7d9ff57a60ae0c7b715b8",
+    "mtime": 1785784178.8766565,
+    "ast_hash": "57f6638121eeabc0c3f124537263db0f",
     "semantic_hash": ""
   }
 }

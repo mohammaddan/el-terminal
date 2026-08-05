@@ -11,6 +11,5 @@
   "9": "hit_interactive_child",
   "10": "build.rs",
   "11": "main.rs",
-  "12": "env_context.rs",
-  "13": "postinst"
+  "12": "env_context.rs"
 }

@@ -13,7 +13,7 @@ mod terminal_tab;
 use gtk4::prelude::*;
 use gtk4::{Application, CssProvider, STYLE_PROVIDER_PRIORITY_APPLICATION};
 
-const APP_ID: &str = "com.terminalemulator.app";
+const APP_ID: &str = "com.elterminal.app";
 
 fn main() {
     let app = Application::builder().application_id(APP_ID).build();

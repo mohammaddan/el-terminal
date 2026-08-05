@@ -515,7 +515,7 @@ mod tests {
     #[test]
     fn extracts_after_oh_my_zsh_prompt() {
         let q = extract_shell_ask_query(
-            "➜  terminal-emulator git:(main) ✗ ?? how do I find large files",
+            "➜  el-terminal git:(main) ✗ ?? how do I find large files",
             "??",
         )
         .unwrap();
