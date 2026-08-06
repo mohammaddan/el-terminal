@@ -131,6 +131,12 @@ impl AskPanel {
     }
 
     pub fn set_status(&self, text: &str) {
+        self.status.remove_css_class("ask-status-sharing");
+        self.status.set_text(text);
+    }
+
+    pub fn set_status_sharing(&self, text: &str) {
+        self.status.add_css_class("ask-status-sharing");
         self.status.set_text(text);
     }
 
@@ -257,14 +263,22 @@ impl AskPanel {
 
         panel.set_prompt_text(prompt);
         panel.set_visible(true);
-        panel.set_status("Thinking…");
+        if settings.ask_share_terminal_context {
+            panel.set_status_sharing("Sharing terminal context…");
+        } else {
+            panel.set_status("Thinking… (terminal context not shared)");
+        }
         panel.clear_results();
         panel.ask_btn.set_sensitive(false);
         *panel.busy.borrow_mut() = true;
 
-        let context = get_terminal()
-            .map(|term| TerminalContext::from_terminal(&term))
-            .unwrap_or_default();
+        let context = if settings.ask_share_terminal_context {
+            get_terminal()
+                .map(|term| TerminalContext::from_terminal(&term))
+                .unwrap_or_default()
+        } else {
+            TerminalContext::default()
+        };
 
         let (tx, rx) = mpsc::channel::<Result<AskReply, String>>();
         let settings_c = settings.clone();
@@ -360,10 +374,20 @@ pub fn run_shell_ask(
         return;
     }
 
-    let context = TerminalContext::from_terminal(terminal);
+    let share = settings.ask_share_terminal_context;
+    let context = if share {
+        TerminalContext::from_terminal(terminal)
+    } else {
+        TerminalContext::default()
+    };
+    let share_note = if share {
+        "\x1b[33m[sharing terminal context]\x1b[0m"
+    } else {
+        "\x1b[2m[terminal context not shared]\x1b[0m"
+    };
     terminal_tab::feed_output(
         terminal,
-        &format!("\r\n\x1b[1;36m??\x1b[0m {question}\r\n\x1b[2m…\x1b[0m\r\n"),
+        &format!("\r\n\x1b[1;36m??\x1b[0m {question}\r\n{share_note}\r\n\x1b[2m…\x1b[0m\r\n"),
     );
 
     let (tx, rx) = mpsc::channel::<Result<AskReply, String>>();

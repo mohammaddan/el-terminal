@@ -2,8 +2,8 @@ use crate::settings::{AppSettings, FONT_SIZE_MAX, FONT_SIZE_MIN, THEME_IDS, THEM
 use gtk4::glib::clone;
 use gtk4::prelude::*;
 use gtk4::{
-    Align, Box as GtkBox, Button, Dialog, DropDown, Entry, Label, Orientation, PasswordEntry,
-    SpinButton, Window,
+    Align, Box as GtkBox, Button, CheckButton, Dialog, DropDown, Entry, Label, Orientation,
+    PasswordEntry, SpinButton, Window,
 };
 
 /// Open the Settings dialog. On Save, updates `settings` via `on_save`.
@@ -97,8 +97,16 @@ pub fn open_settings_dialog(
     prefix_row.append(&prefix_entry);
     content.append(&prefix_row);
 
+    let share_ctx = CheckButton::with_label("Share terminal context with Ask AI");
+    share_ctx.set_active(current.ask_share_terminal_context);
+    share_ctx.set_tooltip_text(Some(
+        "When enabled, Ask sends working directory, tab title, and recent terminal output to the LLM. Off by default.",
+    ));
+    share_ctx.add_css_class("settings-check");
+    content.append(&share_ctx);
+
     let hint = Label::new(Some(
-        "Endpoint is the API base (…/v1). In the shell, type the Ask prefix (default ??) then your question and press Enter.",
+        "Endpoint is the API base (…/v1). In the shell, type the Ask prefix (default ??) then your question and press Enter. Terminal context is never sent unless “Share terminal context” is enabled.",
     ));
     hint.add_css_class("settings-hint");
     hint.set_wrap(true);
@@ -120,6 +128,8 @@ pub fn open_settings_dialog(
     content.append(&buttons);
 
     dialog.set_child(Some(&content));
+
+    let previous = current.clone();
 
     cancel.connect_clicked(clone!(
         #[strong]
@@ -146,6 +156,8 @@ pub fn open_settings_dialog(
         model_entry,
         #[strong]
         prefix_entry,
+        #[strong]
+        share_ctx,
         move |_| {
             let idx = theme_dropdown.selected() as usize;
             let theme = THEME_IDS
@@ -153,15 +165,18 @@ pub fn open_settings_dialog(
                 .copied()
                 .unwrap_or("glass-dark")
                 .to_string();
-            let mut settings = AppSettings {
-                theme,
-                font_size: size_spin.value() as u32,
-                font_family: font_entry.text().to_string(),
-                llm_endpoint: endpoint_entry.text().to_string(),
-                llm_api_key: key_entry.text().to_string(),
-                llm_model: model_entry.text().to_string(),
-                ask_prefix: prefix_entry.text().to_string(),
-            };
+
+            let mut settings = previous.clone();
+            if theme != settings.theme {
+                settings.apply_theme_preset(&theme);
+            }
+            settings.font_size = size_spin.value() as u32;
+            settings.font_family = font_entry.text().to_string();
+            settings.llm_endpoint = endpoint_entry.text().to_string();
+            settings.llm_api_key = key_entry.text().to_string();
+            settings.llm_model = model_entry.text().to_string();
+            settings.ask_prefix = prefix_entry.text().to_string();
+            settings.ask_share_terminal_context = share_ctx.is_active();
             settings.normalize();
             on_save(settings);
             dialog.close();

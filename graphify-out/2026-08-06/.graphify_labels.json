@@ -18,6 +18,5 @@
   "16": "test-desktop-integration.sh",
   "17": "postinst",
   "18": "postrm",
-  "19": "prerm",
-  "20": "AppSettings"
+  "19": "prerm"
 }

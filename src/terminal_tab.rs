@@ -1,4 +1,4 @@
-use crate::settings::AppSettings;
+use crate::settings::{AppSettings, ThemeStyle};
 use gtk4::gdk::RGBA;
 use gtk4::gio;
 use gtk4::prelude::*;
@@ -10,7 +10,20 @@ use vte4::{Format, PtyFlags, Terminal};
 /// Accent CSS classes cycling across tabs (green / blue / purple).
 pub const ACCENT_CLASSES: [&str; 3] = ["green", "blue", "purple"];
 
+/// How to start the PTY child for a new terminal pane.
+#[derive(Clone, Debug, Default)]
+pub struct SpawnOpts {
+    /// Override cwd; when `None`, uses the process current directory.
+    pub working_directory: Option<String>,
+    /// When set, run `$SHELL -c <command>` instead of an interactive shell.
+    pub command: Option<String>,
+}
+
 pub fn create_terminal(settings: &AppSettings) -> Terminal {
+    create_terminal_with(settings, SpawnOpts::default())
+}
+
+pub fn create_terminal_with(settings: &AppSettings, spawn: SpawnOpts) -> Terminal {
     let terminal = Terminal::new();
     terminal.set_hexpand(true);
     terminal.set_vexpand(true);
@@ -21,8 +34,8 @@ pub fn create_terminal(settings: &AppSettings) -> Terminal {
     terminal.set_clear_background(false);
 
     apply_font(&terminal, settings);
-    apply_palette(&terminal, &settings.theme);
-    spawn_shell(&terminal);
+    apply_palette(&terminal, &settings.style);
+    spawn_shell(&terminal, &spawn);
     terminal
 }
 
@@ -31,72 +44,43 @@ pub fn apply_font(terminal: &Terminal, settings: &AppSettings) {
     terminal.set_font(Some(&font));
 }
 
-pub fn apply_palette(terminal: &Terminal, theme: &str) {
-    let (fg_hex, bg, palette_hex) = theme_colors(theme);
-    let fg = parse_rgba(fg_hex);
-    let bg = RGBA::new(bg.0, bg.1, bg.2, bg.3);
+pub fn apply_palette(terminal: &Terminal, style: &ThemeStyle) {
+    let fg = parse_rgba(&style.terminal_fg);
+    let bg = RGBA::new(
+        style.terminal_bg[0],
+        style.terminal_bg[1],
+        style.terminal_bg[2],
+        style.terminal_bg[3],
+    );
 
-    let palette: Vec<RGBA> = palette_hex.iter().map(|h| parse_rgba(h)).collect();
+    let palette: Vec<RGBA> = style.palette.iter().map(|h| parse_rgba(h)).collect();
     let refs: Vec<&RGBA> = palette.iter().collect();
     terminal.set_colors(Some(&fg), Some(&bg), &refs);
-}
-
-type RgbaF = (f32, f32, f32, f32);
-
-fn theme_colors(theme: &str) -> (&'static str, RgbaF, [&'static str; 16]) {
-    match theme {
-        "nord" => (
-            "#d8dee9",
-            (0.180, 0.204, 0.251, 0.55), // #2e3440
-            [
-                "#3b4252", "#bf616a", "#a3be8c", "#ebcb8b", "#81a1c1", "#b48ead", "#88c0d0",
-                "#e5e9f0", "#4c566a", "#bf616a", "#a3be8c", "#ebcb8b", "#81a1c1", "#b48ead",
-                "#8fbcbb", "#eceff4",
-            ],
-        ),
-        "solarized-dark" => (
-            "#839496",
-            (0.000, 0.169, 0.212, 0.55), // #002b36
-            [
-                "#073642", "#dc322f", "#859900", "#b58900", "#268bd2", "#d33682", "#2aa198",
-                "#eee8d5", "#002b36", "#cb4b16", "#586e75", "#657b83", "#839496", "#6c71c4",
-                "#93a1a1", "#fdf6e3",
-            ],
-        ),
-        "light" => (
-            "#1a1d23",
-            (0.961, 0.965, 0.973, 0.85), // #f5f6f8
-            [
-                "#1a1d23", "#e35d6a", "#2f9e6e", "#b08900", "#3b82c4", "#8b6cc7", "#2a9d8f",
-                "#e6e8eb", "#6b7280", "#ef7a84", "#3dd68c", "#e5c07b", "#6cb6ff", "#b794f6",
-                "#56b6c2", "#ffffff",
-            ],
-        ),
-        // glass-dark (default)
-        _ => (
-            "#e6e8eb",
-            (0.051, 0.059, 0.071, 0.55), // #0d0f12
-            [
-                "#0d0f12", "#ff6b6b", "#3dd68c", "#e5c07b", "#6cb6ff", "#b794f6", "#56b6c2",
-                "#e6e8eb", "#5c6370", "#ff8787", "#5eead4", "#f0d78c", "#89b4ff", "#c4b5fd",
-                "#67e8f9", "#ffffff",
-            ],
-        ),
-    }
 }
 
 fn parse_rgba(hex: &str) -> RGBA {
     RGBA::parse(hex).unwrap_or_else(|_| RGBA::new(1.0, 1.0, 1.0, 1.0))
 }
 
-pub fn spawn_shell(terminal: &Terminal) {
+pub fn spawn_shell(terminal: &Terminal, spawn: &SpawnOpts) {
     let shell = env::var("SHELL").unwrap_or_else(|_| "/bin/bash".into());
-    let argv = [shell.as_str()];
-    let cwd = env::current_dir()
-        .ok()
-        .and_then(|p| p.to_str().map(|s| s.to_string()));
+    let cwd = spawn
+        .working_directory
+        .clone()
+        .or_else(|| {
+            env::current_dir()
+                .ok()
+                .and_then(|p| p.to_str().map(|s| s.to_string()))
+        });
 
-    let term = terminal.clone();
+    let argv_owned: Vec<String> = match &spawn.command {
+        Some(cmd) => vec![shell, "-c".into(), cmd.clone()],
+        None => vec![shell],
+    };
+    let argv: Vec<&str> = argv_owned.iter().map(String::as_str).collect();
+
+    // spawn_async already watches the child and emits `child-exited`; do not
+    // also call watch_child — that double-reaps and triggers GLib waitid warnings.
     terminal.spawn_async(
         PtyFlags::DEFAULT,
         cwd.as_deref(),
@@ -106,11 +90,8 @@ pub fn spawn_shell(terminal: &Terminal) {
         || {},
         -1,
         None::<&gio::Cancellable>,
-        move |result| match result {
-            Ok(pid) => {
-                term.watch_child(pid);
-            }
-            Err(err) => {
+        move |result| {
+            if let Err(err) = result {
                 eprintln!("failed to spawn shell: {err}");
             }
         },

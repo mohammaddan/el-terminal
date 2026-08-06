@@ -1,4 +1,5 @@
-/* Shared frosted surface — header and content use the same transparent layers */
+/* Structural theme — colors/radii overridden at runtime by ThemeStyle CssProvider.
+   Fallbacks keep the sheet valid before the first style apply. */
 @define-color bg_glass alpha(#0d0f12, 0.55);
 @define-color bg_tab alpha(#1a1e24, 0.55);
 @define-color fg_primary #e6e8eb;
@@ -7,6 +8,14 @@
 @define-color accent_blue #6cb6ff;
 @define-color accent_purple #b794f6;
 @define-color border_subtle alpha(#ffffff, 0.10);
+@define-color popover_bg alpha(#14171c, 0.92);
+@define-color settings_bg alpha(#14171c, 0.96);
+@define-color ask_panel_bg alpha(#12151a, 0.92);
+@define-color ask_prompt_bg alpha(#0d0f12, 0.55);
+@define-color danger #e35d6a;
+@define-color warning #e5c07b;
+@define-color tab_border transparent;
+@define-color tab_border_active #3dd68c;
 
 /* Outer GDK surface must stay fully clear so rounded chrome can show through */
 window.terminal-window {
@@ -18,7 +27,6 @@ window.terminal-window {
 
 .window-chrome {
   background-color: transparent;
-  border-radius: 16px;
 }
 
 .top-bar {
@@ -26,22 +34,17 @@ window.terminal-window {
   background-image: none;
   padding: 4px 8px;
   min-height: 28px;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
 }
 
 .terminal-host {
   background-color: transparent;
   background-image: none;
   padding: 4px 10px 10px 10px;
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
 }
 
 .tab-pill {
   background-color: transparent;
-  border-radius: 999px;
-  border: 1px solid transparent;
+  border: 1px solid @tab_border;
   padding: 1px 6px;
   color: @fg_muted;
   min-height: 20px;
@@ -54,7 +57,7 @@ window.terminal-window {
 
 .tab-pill.active {
   background-color: @bg_tab;
-  border-color: @accent_green;
+  border-color: @tab_border_active;
   color: @fg_primary;
 }
 
@@ -127,7 +130,7 @@ window.terminal-window {
 }
 
 .window-close-btn:hover {
-  background-color: alpha(#e35d6a, 0.85);
+  background-color: alpha(@danger, 0.85);
   color: #ffffff;
 }
 
@@ -143,19 +146,19 @@ vte-terminal {
   background-color: transparent;
 }
 
-.terminal-paned > separator {
-  background-color: alpha(#ffffff, 0.10);
+.terminal-paned>separator {
+  background-color: @border_subtle;
   min-width: 5px;
   min-height: 5px;
 }
 
-.terminal-paned > separator:hover {
+.terminal-paned>separator:hover {
   background-color: alpha(@accent_green, 0.45);
 }
 
 popover.menu,
 popover contents {
-  background-color: alpha(#14171c, 0.92);
+  background-color: @popover_bg;
   color: @fg_primary;
   border: 1px solid @border_subtle;
   border-radius: 10px;
@@ -172,9 +175,8 @@ popover.menu modelbutton:hover {
 
 /* Settings dialog */
 .settings-dialog {
-  background-color: alpha(#14171c, 0.96);
+  background-color: @settings_bg;
   color: @fg_primary;
-  border-radius: 12px;
 }
 
 .settings-section {
@@ -217,9 +219,8 @@ popover.menu modelbutton:hover {
 
 /* Ask side panel */
 .ask-panel {
-  background-color: alpha(#12151a, 0.92);
+  background-color: @ask_panel_bg;
   border-left: 1px solid @border_subtle;
-  border-bottom-right-radius: 16px;
   padding: 10px 12px 12px 12px;
   min-width: 280px;
   max-width: 360px;
@@ -249,7 +250,7 @@ popover.menu modelbutton:hover {
 .ask-prompt-scroll {
   border: 1px solid @border_subtle;
   border-radius: 8px;
-  background-color: alpha(#0d0f12, 0.55);
+  background-color: @ask_prompt_bg;
 }
 
 .ask-prompt {
@@ -278,6 +279,10 @@ popover.menu modelbutton:hover {
 .ask-status {
   color: @fg_muted;
   font-size: 11px;
+}
+
+.ask-status.ask-status-sharing {
+  color: @warning;
 }
 
 .ask-text {

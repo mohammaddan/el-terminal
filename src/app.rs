@@ -1,20 +1,23 @@
 use crate::ask::{self, AskPanel};
-use crate::chrome;
+use crate::chrome::{self, ChromeBackground};
 use crate::context_menu;
+use crate::launch;
 use crate::settings::{AppSettings, FONT_SIZE_MAX, FONT_SIZE_MIN};
 use crate::settings_ui;
 use crate::tab_bar;
-use crate::terminal_tab;
+use crate::terminal_tab::{self, SpawnOpts};
 use gtk4::gdk::{self, Key, ModifierType};
 use gtk4::gio;
 use gtk4::glib::{self, clone};
 use gtk4::prelude::*;
 use gtk4::{
-    Application, ApplicationWindow, Box as GtkBox, EventControllerKey, EventControllerScroll,
-    EventControllerScrollFlags, GestureClick, Orientation, Overlay, Paned, Stack,
-    StackTransitionType, Widget,
+    Application, ApplicationWindow, Box as GtkBox, CssProvider, EventControllerKey,
+    EventControllerScroll, EventControllerScrollFlags, GestureClick, Orientation, Overlay, Paned,
+    Stack, StackTransitionType, Widget, STYLE_PROVIDER_PRIORITY_APPLICATION,
 };
 use std::cell::{Cell, RefCell};
+use std::env;
+use std::path::Path;
 use std::rc::Rc;
 use vte4::prelude::*;
 use vte4::Terminal;
@@ -41,10 +44,21 @@ struct AppState {
     next_id: Cell<u32>,
     active: Cell<usize>,
     settings: RefCell<AppSettings>,
+    chrome: ChromeBackground,
+    style_provider: CssProvider,
     ask_panel: RefCell<Option<Rc<AskPanel>>>,
+    /// Consumed by the first tab only (`--command` / `-e`).
+    pending_command: RefCell<Option<String>>,
+    /// Absolute cwd for the first pane (`--working-directory` / `--dir`).
+    pending_cwd: RefCell<Option<String>>,
 }
 
 pub fn build_ui(app: &Application) {
+    let launch_opts = launch::take();
+    if let Some(dir) = launch_opts.working_directory.as_deref() {
+        apply_working_directory(dir);
+    }
+
     let window = ApplicationWindow::builder()
         .application(app)
         .title("El-Terminal")
@@ -62,7 +76,7 @@ pub fn build_ui(app: &Application) {
     overlay.set_vexpand(true);
 
     let chrome_bg = chrome::build_chrome_background();
-    overlay.set_child(Some(&chrome_bg));
+    overlay.set_child(Some(chrome_bg.widget()));
 
     let root = GtkBox::new(Orientation::Vertical, 0);
     root.add_css_class("window-chrome");
@@ -134,6 +148,15 @@ pub fn build_ui(app: &Application) {
     // Ask the compositor for backdrop blur when the protocol is available.
     crate::blur::install(&window);
 
+    let settings = AppSettings::load();
+
+    let style_provider = CssProvider::new();
+    gtk4::style_context_add_provider_for_display(
+        &gdk::Display::default().expect("display"),
+        &style_provider,
+        STYLE_PROVIDER_PRIORITY_APPLICATION + 1,
+    );
+
     let state = Rc::new(AppState {
         window: window.clone(),
         tab_strip,
@@ -141,9 +164,14 @@ pub fn build_ui(app: &Application) {
         tabs: RefCell::new(Vec::new()),
         next_id: Cell::new(0),
         active: Cell::new(0),
-        settings: RefCell::new(AppSettings::load()),
+        settings: RefCell::new(settings),
+        chrome: chrome_bg,
+        style_provider,
         ask_panel: RefCell::new(Some(ask_panel.clone())),
+        pending_command: RefCell::new(launch_opts.command),
+        pending_cwd: RefCell::new(launch_opts.working_directory),
     });
+    apply_theme_style(&state);
 
     AskPanel::connect_ask(
         &ask_panel,
@@ -186,6 +214,13 @@ pub fn build_ui(app: &Application) {
 
     add_tab(&state);
     state.window.present();
+}
+
+fn apply_working_directory(dir: &str) {
+    let path = Path::new(dir);
+    if let Err(err) = env::set_current_dir(path) {
+        eprintln!("el-terminal: failed to set working directory to {dir}: {err}");
+    }
 }
 
 fn install_drag(top_bar: &GtkBox, window: &ApplicationWindow) {
@@ -517,13 +552,26 @@ fn toggle_ask(state: &AppState) {
     }
 }
 
+fn apply_theme_style(state: &AppState) {
+    let settings = state.settings.borrow();
+    state
+        .style_provider
+        .load_from_data(&settings.style.to_css());
+    state.chrome.apply_style(
+        settings.style.window_radius,
+        settings.style.chrome_fill,
+        settings.style.window_border,
+    );
+}
+
 fn apply_settings_to_all(state: &AppState) {
+    apply_theme_style(state);
     let settings = state.settings.borrow().clone();
     let tabs = state.tabs.borrow();
     for tab in tabs.iter() {
         for pane in &tab.panes {
             terminal_tab::apply_font(&pane.terminal, &settings);
-            terminal_tab::apply_palette(&pane.terminal, &settings.theme);
+            terminal_tab::apply_palette(&pane.terminal, &settings.style);
         }
     }
 }
@@ -572,7 +620,15 @@ fn add_tab(state: &Rc<AppState>) {
     let accent = terminal_tab::ACCENT_CLASSES[(id as usize) % terminal_tab::ACCENT_CLASSES.len()];
 
     let pane_id = next_id(state);
-    let terminal = terminal_tab::create_terminal(&state.settings.borrow());
+    let command = state.pending_command.borrow_mut().take();
+    let working_directory = state.pending_cwd.borrow_mut().take();
+    let terminal = terminal_tab::create_terminal_with(
+        &state.settings.borrow(),
+        SpawnOpts {
+            working_directory,
+            command,
+        },
+    );
     let title = terminal_tab::default_title();
 
     let (pill, label, close_btn) = tab_bar::build_tab_pill(&title, accent, false);
@@ -683,7 +739,20 @@ fn wire_pane(state: &Rc<AppState>, tab_name: &str, pane_id: u32, terminal: &Term
         let name_c = tab_name.to_string();
         let pid = pane_id;
         terminal.connect_child_exited(move |_, _| {
-            close_pane_by_id(&s, &name_c, pid);
+            // Ctrl+D / shell EOF: quit when this was the last live session
+            // (no other panes, tabs, or nested shells left in the window).
+            let alone = {
+                let tabs = s.tabs.borrow();
+                tabs.len() == 1
+                    && tabs
+                        .first()
+                        .is_some_and(|t| t.panes.len() == 1 && t.panes[0].id == pid)
+            };
+            if alone {
+                s.window.close();
+            } else {
+                close_pane_by_id(&s, &name_c, pid);
+            }
         });
     }
 
@@ -1096,7 +1165,7 @@ fn reset_last_tab(state: &Rc<AppState>) {
     // If already a single pane, just respawn.
     let pane_count = state.tabs.borrow().first().map(|t| t.panes.len()).unwrap_or(0);
     if pane_count <= 1 {
-        terminal_tab::spawn_shell(&keep_terminal);
+        terminal_tab::spawn_shell(&keep_terminal, &SpawnOpts::default());
         keep_terminal.grab_focus();
         return;
     }
@@ -1118,7 +1187,7 @@ fn reset_last_tab(state: &Rc<AppState>) {
         tab.focused.set(keep_id);
     }
 
-    terminal_tab::spawn_shell(&keep_terminal);
+    terminal_tab::spawn_shell(&keep_terminal, &SpawnOpts::default());
     keep_terminal.grab_focus();
 }
 

@@ -1,0 +1,12 @@
+# Preferred terminal for xdg-terminal-exec (Ubuntu / GNOME).
+#
+# Copy to ~/.config/xdg-terminals.list (or prepend to an existing list)
+# so xdg-terminal-exec picks El-Terminal first:
+#
+#   mkdir -p ~/.config
+#   echo 'el-terminal.desktop' > ~/.config/xdg-terminals.list
+#
+# Desktop entry ID only — one per line. Do not overwrite this file from
+# package postinst; users own their preference list.
+
+el-terminal.desktop

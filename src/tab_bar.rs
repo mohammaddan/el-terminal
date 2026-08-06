@@ -18,7 +18,7 @@ pub fn build_tab_pill(title: &str, accent: &str, active: bool) -> (GtkBox, Label
 
     let label = Label::new(Some(title));
     label.set_ellipsize(gtk4::pango::EllipsizeMode::End);
-    label.set_max_width_chars(16);
+    label.set_max_width_chars(20);
     label.set_xalign(0.0);
 
     let close = Button::from_icon_name("window-close-symbolic");

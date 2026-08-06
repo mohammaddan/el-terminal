@@ -12,12 +12,5 @@
   "10": "build.rs",
   "11": "main.rs",
   "12": "env_context.rs",
-  "13": "postinst",
-  "14": "LaunchOptions",
-  "15": "ElTerminalExtension",
-  "16": "test-desktop-integration.sh",
-  "17": "postinst",
-  "18": "postrm",
-  "19": "prerm",
-  "20": "AppSettings"
+  "13": "postinst"
 }

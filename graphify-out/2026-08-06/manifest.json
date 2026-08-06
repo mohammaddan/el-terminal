@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "src/app.rs": {
-    "mtime": 1786034800.436811,
-    "ast_hash": "6b4cca800c29d1c4d7a6dad2e01280c4",
+    "mtime": 1786032869.556974,
+    "ast_hash": "43c5525112529ee232c946eaa214d25a",
     "semantic_hash": ""
   },
   "src/context_menu.rs": {
@@ -15,7 +15,7 @@
     "semantic_hash": ""
   },
   "src/main.rs": {
-    "mtime": 1786034800.9957767,
+    "mtime": 1786032771.2615688,
     "ast_hash": "d2bd3d4b6283a3026d69b349ab04f2fe",
     "semantic_hash": ""
   },
@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "src/terminal_tab.rs": {
-    "mtime": 1786034570.856944,
-    "ast_hash": "e12b358825bd1ad85351c0ca7abf0d66",
+    "mtime": 1786032040.9615207,
+    "ast_hash": "b53f5f83b4957a6f4f4e5962eac87524",
     "semantic_hash": ""
   },
   "README.md": {
@@ -35,8 +35,8 @@
     "semantic_hash": ""
   },
   "src/chrome.rs": {
-    "mtime": 1786034586.6811192,
-    "ast_hash": "ee93b0d7b3264da679c334fde849cffe",
+    "mtime": 1786018492.6173935,
+    "ast_hash": "192262558f43dd2bb24dcff05943494e",
     "semantic_hash": ""
   },
   "src/blur.rs": {
@@ -55,13 +55,13 @@
     "semantic_hash": ""
   },
   "src/settings.rs": {
-    "mtime": 1786034500.2931123,
-    "ast_hash": "9233a4f31f534fc1462b11a58f19efa2",
+    "mtime": 1786033032.5829802,
+    "ast_hash": "7356e20f6e9a41819a439d8c3f2757c9",
     "semantic_hash": ""
   },
   "src/settings_ui.rs": {
-    "mtime": 1786034921.4294727,
-    "ast_hash": "76ace6518955e652a1ee3d195780acd1",
+    "mtime": 1786033199.8101563,
+    "ast_hash": "810bbd9274268187ff1b69a789f0234d",
     "semantic_hash": ""
   },
   "src/env_context.rs": {

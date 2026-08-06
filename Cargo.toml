@@ -1,6 +1,6 @@
 [package]
 name = "el-terminal"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 description = "El-Terminal — lightweight borderless terminal emulator (GTK4 + VTE)"
 license = "MIT"
@@ -17,6 +17,7 @@ extended-description = """\
 El-Terminal is a lightweight borderless terminal emulator built with GTK4 and VTE. \
 Supports multi-tab sessions, split panes, themes, and optional Ask AI."""
 depends = "$auto"
+recommends = "el-terminal-nautilus"
 maintainer-scripts = "packaging/debian/"
 assets = [
     [
@@ -37,6 +38,29 @@ assets = [
     [
         "packaging/el-terminal.png",
         "usr/share/pixmaps/el-terminal.png",
+        "644",
+    ],
+    [
+        "packaging/xdg-terminals.list.example",
+        "usr/share/doc/el-terminal/",
+        "644",
+    ],
+]
+
+[package.metadata.deb.variants.nautilus]
+name = "el-terminal-nautilus"
+section = "gnome"
+priority = "optional"
+depends = "el-terminal, python3-nautilus"
+recommends = ""
+extended-description = """\
+Nautilus (Files) context-menu extension that adds \
+“Open in El-Terminal” and launches el-terminal with --working-directory."""
+maintainer-scripts = "packaging/debian-nautilus/"
+assets = [
+    [
+        "packaging/nautilus/el_terminal_nautilus.py",
+        "usr/share/nautilus-python/extensions/",
         "644",
     ],
 ]

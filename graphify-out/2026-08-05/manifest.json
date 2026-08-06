@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "src/app.rs": {
-    "mtime": 1786034800.436811,
-    "ast_hash": "6b4cca800c29d1c4d7a6dad2e01280c4",
+    "mtime": 1785792966.681731,
+    "ast_hash": "6c71c6102d7fa366246b267bd9b2d6e4",
     "semantic_hash": ""
   },
   "src/context_menu.rs": {
@@ -15,28 +15,28 @@
     "semantic_hash": ""
   },
   "src/main.rs": {
-    "mtime": 1786034800.9957767,
-    "ast_hash": "d2bd3d4b6283a3026d69b349ab04f2fe",
+    "mtime": 1785793196.3557794,
+    "ast_hash": "a465c52b95a35ad926b295798c8a5a5b",
     "semantic_hash": ""
   },
   "src/tab_bar.rs": {
-    "mtime": 1786018616.3397405,
-    "ast_hash": "8df5c8aef09e032dc7349777a4932f12",
+    "mtime": 1785709186.534466,
+    "ast_hash": "81646d6ee2375fa3c33f7d2a7356e3b7",
     "semantic_hash": ""
   },
   "src/terminal_tab.rs": {
-    "mtime": 1786034570.856944,
-    "ast_hash": "e12b358825bd1ad85351c0ca7abf0d66",
+    "mtime": 1785776778.0995245,
+    "ast_hash": "ae5ccce83431f951f218d466b6d17fcd",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1786033858.9807901,
-    "ast_hash": "80f8e1be3a773498c2d751bfb8996596",
+    "mtime": 1785792977.8790631,
+    "ast_hash": "7b76c1d062487f83bc3bd874ee63e951",
     "semantic_hash": ""
   },
   "src/chrome.rs": {
-    "mtime": 1786034586.6811192,
-    "ast_hash": "ee93b0d7b3264da679c334fde849cffe",
+    "mtime": 1785709880.9392703,
+    "ast_hash": "c18906abfd1abf4f2e165fddcd5bab63",
     "semantic_hash": ""
   },
   "src/blur.rs": {
@@ -45,23 +45,23 @@
     "semantic_hash": ""
   },
   "src/ask.rs": {
-    "mtime": 1786033664.6878998,
-    "ast_hash": "99025d10e79739e4b35103f2fc0ba081",
+    "mtime": 1785792970.7162073,
+    "ast_hash": "924d2be5a9728d144b92456e3299a389",
     "semantic_hash": ""
   },
   "src/llm.rs": {
-    "mtime": 1786033115.8980107,
-    "ast_hash": "c572bedf92fbcaae7400d6818992d3a9",
+    "mtime": 1785763769.912107,
+    "ast_hash": "762855927d161006154b5b7d314ba51d",
     "semantic_hash": ""
   },
   "src/settings.rs": {
-    "mtime": 1786034500.2931123,
-    "ast_hash": "9233a4f31f534fc1462b11a58f19efa2",
+    "mtime": 1785792970.673202,
+    "ast_hash": "315679fc981794d38af23d76aef237ee",
     "semantic_hash": ""
   },
   "src/settings_ui.rs": {
-    "mtime": 1786034921.4294727,
-    "ast_hash": "76ace6518955e652a1ee3d195780acd1",
+    "mtime": 1785766034.3408296,
+    "ast_hash": "c2da9b24cfda87160dbf5e4c0bb877b4",
     "semantic_hash": ""
   },
   "src/env_context.rs": {
@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "packaging/debian/postinst": {
-    "mtime": 1786032922.1636682,
-    "ast_hash": "41ac0cf0ba74cf036efd7a609564b437",
+    "mtime": 1785793208.8570294,
+    "ast_hash": "69971499bdf993f92cfb2b5a59c26114",
     "semantic_hash": ""
   },
   "packaging/el-terminal.png": {
@@ -102,36 +102,6 @@
   "terminal-emulator-logo.png": {
     "mtime": 1785785607.4410486,
     "ast_hash": "f9ab6932e6a7d9ff57a60ae0c7b715b8",
-    "semantic_hash": ""
-  },
-  "src/launch.rs": {
-    "mtime": 1786032760.4864109,
-    "ast_hash": "b7f5d24c5570e6aa76bc271c4cd11833",
-    "semantic_hash": ""
-  },
-  "packaging/debian-nautilus/postinst": {
-    "mtime": 1786033005.4533584,
-    "ast_hash": "cc29e18b2a32ad8511b6d5e905803873",
-    "semantic_hash": ""
-  },
-  "packaging/debian/postrm": {
-    "mtime": 1786032922.1675396,
-    "ast_hash": "044bf7b1bbe8f57a427a2b72f8e91f2e",
-    "semantic_hash": ""
-  },
-  "packaging/debian/prerm": {
-    "mtime": 1786032922.1674676,
-    "ast_hash": "f239f8a0cafaae9af262a0d99065447b",
-    "semantic_hash": ""
-  },
-  "packaging/nautilus/el_terminal_nautilus.py": {
-    "mtime": 1786032990.383539,
-    "ast_hash": "f5bc9ff2f9ebf233b74351fb2e7b649b",
-    "semantic_hash": ""
-  },
-  "packaging/test-desktop-integration.sh": {
-    "mtime": 1786034195.2459118,
-    "ast_hash": "2a062373091af93ab1b9ff04756f85dc",
     "semantic_hash": ""
   }
 }

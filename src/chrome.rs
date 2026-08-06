@@ -4,11 +4,23 @@ use gtk4::cairo::{Context, Format as CairoFormat, ImageSurface};
 use gtk4::prelude::*;
 use gtk4::DrawingArea;
 use std::cell::RefCell;
+use std::rc::Rc;
 
-const RADIUS: f64 = 16.0;
-// Low enough alpha that compositor blur reads through as frosted glass.
-const FILL: (f64, f64, f64, f64) = (0.051, 0.059, 0.071, 0.95);
-const BORDER: (f64, f64, f64, f64) = (1.0, 1.0, 1.0, 0.10);
+struct ChromePaint {
+    radius: f64,
+    fill: (f64, f64, f64, f64),
+    border: (f64, f64, f64, f64),
+}
+
+impl Default for ChromePaint {
+    fn default() -> Self {
+        Self {
+            radius: 12.0,
+            fill: (0.051, 0.059, 0.071, 0.93),
+            border: (1.0, 1.0, 1.0, 0.20),
+        }
+    }
+}
 
 struct NoiseCache {
     width: i32,
@@ -16,14 +28,44 @@ struct NoiseCache {
     surface: ImageSurface,
 }
 
-pub fn build_chrome_background() -> DrawingArea {
+/// Handle to update chrome fill / border / radius at runtime.
+#[derive(Clone)]
+pub struct ChromeBackground {
+    area: DrawingArea,
+    paint: Rc<RefCell<ChromePaint>>,
+}
+
+impl ChromeBackground {
+    pub fn widget(&self) -> &DrawingArea {
+        &self.area
+    }
+
+    pub fn apply_style(
+        &self,
+        radius: f64,
+        fill: [f64; 4],
+        border: [f64; 4],
+    ) {
+        {
+            let mut paint = self.paint.borrow_mut();
+            paint.radius = radius;
+            paint.fill = (fill[0], fill[1], fill[2], fill[3]);
+            paint.border = (border[0], border[1], border[2], border[3]);
+        }
+        self.area.queue_draw();
+    }
+}
+
+pub fn build_chrome_background() -> ChromeBackground {
     let area = DrawingArea::new();
     area.set_hexpand(true);
     area.set_vexpand(true);
     area.set_can_target(false);
     area.add_css_class("window-chrome");
 
+    let paint = Rc::new(RefCell::new(ChromePaint::default()));
     let cache: RefCell<Option<NoiseCache>> = RefCell::new(None);
+    let paint_draw = paint.clone();
 
     area.set_draw_func(move |_area, cr, width, height| {
         let w = width as f64;
@@ -32,12 +74,18 @@ pub fn build_chrome_background() -> DrawingArea {
             return;
         }
 
+        let paint = paint_draw.borrow();
+        let radius = paint.radius;
+        let fill = paint.fill;
+        let border = paint.border;
+        drop(paint);
+
         cr.save().ok();
-        rounded_rect(cr, 0.5, 0.5, w - 1.0, h - 1.0, RADIUS);
+        rounded_rect(cr, 0.5, 0.5, w - 1.0, h - 1.0, radius);
         cr.clip();
 
         // Frosted glass fill — same under header and content.
-        cr.set_source_rgba(FILL.0, FILL.1, FILL.2, FILL.3);
+        cr.set_source_rgba(fill.0, fill.1, fill.2, fill.3);
         cr.paint().ok();
 
         // Cached grain overlay.
@@ -65,13 +113,13 @@ pub fn build_chrome_background() -> DrawingArea {
         cr.restore().ok();
 
         // Soft rim so the rounded edge reads against the desktop.
-        rounded_rect(cr, 0.5, 0.5, w - 1.0, h - 1.0, RADIUS);
-        cr.set_source_rgba(BORDER.0, BORDER.1, BORDER.2, BORDER.3);
+        rounded_rect(cr, 0.5, 0.5, w - 1.0, h - 1.0, radius);
+        cr.set_source_rgba(border.0, border.1, border.2, border.3);
         cr.set_line_width(1.0);
         cr.stroke().ok();
     });
 
-    area
+    ChromeBackground { area, paint }
 }
 
 fn build_noise_surface(width: i32, height: i32) -> Option<ImageSurface> {
@@ -86,7 +134,7 @@ fn build_noise_surface(width: i32, height: i32) -> Option<ImageSurface> {
                 let n = hash2(x as u32, y as u32);
                 let v = (n & 0xff) as f64 / 255.0;
                 // Visible film grain without washing out the glass.
-                let a = 0.01 + ((n >> 8) & 0x3f) as f64 / 255.0 * 0.03;
+                let a = 0.01 + ((n >> 8) & 0x3f) as f64 / 255.0 * 0.02;
                 cr.set_source_rgba(v, v, v, a);
                 cr.rectangle(x as f64, y as f64, step as f64, step as f64);
                 cr.fill().ok();

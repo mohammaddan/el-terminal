@@ -1,0 +1,4 @@
+#!/bin/sh
+set -e
+# Nautilus picks up new Python extensions after restart.
+echo "el-terminal-nautilus: restart Files (nautilus -q) to load the extension." >&2 || true

@@ -122,7 +122,8 @@ struct CommandsPayload {
 
 /// Call an OpenAI-compatible chat completions endpoint.
 /// Accepts both streaming (SSE) and non-streaming JSON responses.
-/// `context` adds an environment pre-prompt (shell/DB/REPL); defaults to a generic terminal context.
+/// When `settings.ask_share_terminal_context` is true, `context` is appended
+/// as an environment pre-prompt; otherwise only the generic system prompt is sent.
 pub fn ask(
     settings: &AppSettings,
     prompt: &str,
@@ -139,7 +140,15 @@ pub fn ask(
     let base = settings.llm_endpoint.trim_end_matches('/');
     let url = format!("{base}/chat/completions");
 
-    let system = format!("{SYSTEM_PROMPT}\n\n{}", context.build_pre_prompt());
+    let system = if settings.ask_share_terminal_context {
+        format!("{SYSTEM_PROMPT}\n\n{}", context.build_pre_prompt())
+    } else {
+        format!(
+            "{SYSTEM_PROMPT}\n\n## Active terminal environment\n\
+             - No live terminal context was shared for this request.\n\
+             - Assume a general Linux terminal and portable shell commands."
+        )
+    };
 
     let body = ChatRequest {
         model: &settings.llm_model,
