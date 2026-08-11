@@ -1,0 +1,59 @@
+{
+  "id": "xcolors-net-visiblue",
+  "label": "VisiBlue",
+  "window_radius": 12.0,
+  "window_border": [
+    0.4,
+    0.4,
+    0.6,
+    0.22
+  ],
+  "chrome_fill": [
+    0.0,
+    0.0,
+    0.0,
+    0.93
+  ],
+  "tab_radius": 8.0,
+  "tab_border": "transparent",
+  "tab_border_active": "#669999",
+  "bg_glass": "alpha(#000000, 0.55)",
+  "bg_tab": "alpha(#333366, 0.55)",
+  "fg_primary": "#666699",
+  "fg_muted": "#333399",
+  "accent_green": "#0099cc",
+  "accent_blue": "#006699",
+  "accent_purple": "#0066ff",
+  "border_subtle": "alpha(#666699, 0.12)",
+  "popover_bg": "alpha(#333366, 0.94)",
+  "settings_bg": "alpha(#333366, 0.96)",
+  "ask_panel_bg": "alpha(#000000, 0.94)",
+  "ask_prompt_bg": "alpha(#000000, 0.55)",
+  "danger": "#6666cc",
+  "warning": "#3366cc",
+  "terminal_fg": "#666699",
+  "terminal_bg": [
+    0.0,
+    0.0,
+    0.0,
+    0.55
+  ],
+  "palette": [
+    "#333366",
+    "#6666cc",
+    "#0099cc",
+    "#3366cc",
+    "#006699",
+    "#0066ff",
+    "#669999",
+    "#99cccc",
+    "#333399",
+    "#9999ff",
+    "#00ccff",
+    "#6699ff",
+    "#0099cc",
+    "#0099ff",
+    "#66cccc",
+    "#ccffff"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "xcolors-net-parker-brothers",
+  "label": "Parker Brothers",
+  "window_radius": 12.0,
+  "window_border": [
+    1.0,
+    1.0,
+    1.0,
+    0.22
+  ],
+  "chrome_fill": [
+    0.0,
+    0.0,
+    0.0,
+    0.93
+  ],
+  "tab_radius": 8.0,
+  "tab_border": "transparent",
+  "tab_border_active": "#394745",
+  "bg_glass": "alpha(#000000, 0.55)",
+  "bg_tab": "alpha(#322a2c, 0.55)",
+  "fg_primary": "#ffffff",
+  "fg_muted": "#46423b",
+  "accent_green": "#344b1b",
+  "accent_blue": "#434045",
+  "accent_purple": "#5c1e25",
+  "border_subtle": "alpha(#ffffff, 0.12)",
+  "popover_bg": "alpha(#322a2c, 0.94)",
+  "settings_bg": "alpha(#322a2c, 0.96)",
+  "ask_panel_bg": "alpha(#000000, 0.94)",
+  "ask_prompt_bg": "alpha(#000000, 0.55)",
+  "danger": "#79220e",
+  "warning": "#b45b00",
+  "terminal_fg": "#ffffff",
+  "terminal_bg": [
+    0.0,
+    0.0,
+    0.0,
+    0.55
+  ],
+  "palette": [
+    "#322a2c",
+    "#79220e",
+    "#344b1b",
+    "#b45b00",
+    "#434045",
+    "#5c1e25",
+    "#394745",
+    "#ae8842",
+    "#46423b",
+    "#aa261f",
+    "#76550f",
+    "#b57f02",
+    "#908862",
+    "#624a35",
+    "#393e38",
+    "#a59058"
+  ]
+}

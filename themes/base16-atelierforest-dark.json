@@ -1,0 +1,59 @@
+{
+  "id": "base16-atelierforest-dark",
+  "label": "Atelierforest (dark)",
+  "window_radius": 12.0,
+  "window_border": [
+    0.659,
+    0.631,
+    0.624,
+    0.22
+  ],
+  "chrome_fill": [
+    0.106,
+    0.098,
+    0.094,
+    0.93
+  ],
+  "tab_radius": 8.0,
+  "tab_border": "transparent",
+  "tab_border_active": "#00ad9c",
+  "bg_glass": "alpha(#1b1918, 0.55)",
+  "bg_tab": "alpha(#1b1918, 0.55)",
+  "fg_primary": "#a8a19f",
+  "fg_muted": "#766e6b",
+  "accent_green": "#5ab738",
+  "accent_blue": "#407ee7",
+  "accent_purple": "#6666ea",
+  "border_subtle": "alpha(#a8a19f, 0.12)",
+  "popover_bg": "alpha(#1b1918, 0.94)",
+  "settings_bg": "alpha(#1b1918, 0.96)",
+  "ask_panel_bg": "alpha(#1b1918, 0.94)",
+  "ask_prompt_bg": "alpha(#1b1918, 0.55)",
+  "danger": "#f22c40",
+  "warning": "#d5911a",
+  "terminal_fg": "#a8a19f",
+  "terminal_bg": [
+    0.106,
+    0.098,
+    0.094,
+    0.55
+  ],
+  "palette": [
+    "#1b1918",
+    "#f22c40",
+    "#5ab738",
+    "#d5911a",
+    "#407ee7",
+    "#6666ea",
+    "#00ad9c",
+    "#a8a19f",
+    "#766e6b",
+    "#f22c40",
+    "#5ab738",
+    "#d5911a",
+    "#407ee7",
+    "#6666ea",
+    "#00ad9c",
+    "#f1efee"
+  ]
+}

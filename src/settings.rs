@@ -1,15 +1,13 @@
 use serde::{Deserialize, Serialize};
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
+use std::sync::OnceLock;
 
 pub const FONT_SIZE_MIN: u32 = 8;
 pub const FONT_SIZE_MAX: u32 = 32;
 pub const FONT_SIZE_DEFAULT: u32 = 11;
 /// Default in-shell Ask prefix. Type `?? how do I …` then Enter.
 pub const ASK_PREFIX_DEFAULT: &str = "??";
-
-pub const THEME_IDS: &[&str] = &["glass-dark", "nord", "solarized-dark", "light"];
-pub const THEME_LABELS: &[&str] = &["Glass Dark", "Nord", "Solarized Dark", "Light"];
 
 pub const WINDOW_RADIUS_MIN: f64 = 0.0;
 pub const WINDOW_RADIUS_MAX: f64 = 32.0;
@@ -25,7 +23,19 @@ fn default_ask_share_terminal_context() -> bool {
 }
 
 fn default_theme_style() -> ThemeStyle {
-    ThemeStyle::preset("glass-dark")
+    ThemeStyle::preset(&default_theme_id())
+}
+
+/// Named theme pack loaded from a JSON file.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ThemePreset {
+    pub id: String,
+    pub label: String,
+    /// When true, this preset is the fallback/default theme.
+    #[serde(default)]
+    pub default: bool,
+    #[serde(flatten)]
+    pub style: ThemeStyle,
 }
 
 /// Active theme appearance: UI tokens, chrome, tabs, and VTE palette.
@@ -58,18 +68,16 @@ pub struct ThemeStyle {
 
 impl Default for ThemeStyle {
     fn default() -> Self {
-        Self::preset("glass-dark")
+        Self::preset(&default_theme_id())
     }
 }
 
 impl ThemeStyle {
     pub fn preset(theme_id: &str) -> Self {
-        match theme_id {
-            "nord" => Self::nord(),
-            "solarized-dark" => Self::solarized_dark(),
-            "light" => Self::light(),
-            _ => Self::glass_dark(),
-        }
+        theme_by_id(theme_id)
+            .or_else(|| theme_catalog().first().cloned())
+            .expect("no themes loaded; add JSON files under themes/")
+            .style
     }
 
     pub fn normalize(&mut self) {
@@ -165,186 +173,134 @@ impl ThemeStyle {
             tab_border_active = self.tab_border_active,
         )
     }
+}
 
-    fn glass_dark() -> Self {
-        Self {
-            window_radius: 12.0,
-            window_border: [1.0, 1.0, 1.0, 0.20],
-            chrome_fill: [0.051, 0.059, 0.071, 0.93],
-            tab_radius: 999.0,
-            tab_border: "transparent".into(),
-            tab_border_active: "#3dd68c".into(),
-            bg_glass: "alpha(#0d0f12, 0.55)".into(),
-            bg_tab: "alpha(#1a1e24, 0.55)".into(),
-            fg_primary: "#e6e8eb".into(),
-            fg_muted: "#8b929a".into(),
-            accent_green: "#3dd68c".into(),
-            accent_blue: "#6cb6ff".into(),
-            accent_purple: "#b794f6".into(),
-            border_subtle: "alpha(#ffffff, 0.10)".into(),
-            popover_bg: "alpha(#14171c, 0.92)".into(),
-            settings_bg: "alpha(#14171c, 0.96)".into(),
-            ask_panel_bg: "alpha(#12151a, 0.92)".into(),
-            ask_prompt_bg: "alpha(#0d0f12, 0.55)".into(),
-            danger: "#e35d6a".into(),
-            warning: "#e5c07b".into(),
-            terminal_fg: "#e6e8eb".into(),
-            terminal_bg: [0.051, 0.059, 0.071, 0.55],
-            palette: [
-                "#0d0f12".into(),
-                "#ff6b6b".into(),
-                "#3dd68c".into(),
-                "#e5c07b".into(),
-                "#6cb6ff".into(),
-                "#b794f6".into(),
-                "#56b6c2".into(),
-                "#e6e8eb".into(),
-                "#5c6370".into(),
-                "#ff8787".into(),
-                "#5eead4".into(),
-                "#f0d78c".into(),
-                "#89b4ff".into(),
-                "#c4b5fd".into(),
-                "#67e8f9".into(),
-                "#ffffff".into(),
-            ],
+/// Themes from system/bundled `themes/*.json`, plus user overrides under
+/// `~/.config/el-terminal/themes/`. Same `id` from the user dir wins.
+pub fn theme_catalog() -> &'static [ThemePreset] {
+    static CATALOG: OnceLock<Vec<ThemePreset>> = OnceLock::new();
+    CATALOG.get_or_init(load_theme_catalog).as_slice()
+}
+
+/// Id of the theme marked `"default": true`, else the first loaded theme.
+pub fn default_theme_id() -> String {
+    theme_catalog()
+        .iter()
+        .find(|t| t.default)
+        .or_else(|| theme_catalog().first())
+        .map(|t| t.id.clone())
+        .expect("no themes loaded; add JSON files under themes/")
+}
+
+pub fn theme_by_id(theme_id: &str) -> Option<ThemePreset> {
+    theme_catalog()
+        .iter()
+        .find(|t| t.id == theme_id)
+        .cloned()
+}
+
+pub fn theme_ids() -> Vec<String> {
+    theme_catalog().iter().map(|t| t.id.clone()).collect()
+}
+
+pub fn theme_labels() -> Vec<String> {
+    theme_catalog().iter().map(|t| t.label.clone()).collect()
+}
+
+fn load_theme_catalog() -> Vec<ThemePreset> {
+    let mut presets = Vec::new();
+
+    for dir in bundled_themes_dirs() {
+        load_themes_from_dir(&dir, &mut presets);
+    }
+    load_themes_from_dir(&user_themes_dir(), &mut presets);
+
+    if presets.is_empty() {
+        panic!(
+            "no themes loaded; looked in {:?} and {}",
+            bundled_themes_dirs(),
+            user_themes_dir().display()
+        );
+    }
+
+    // Default-marked theme first for stable dropdown ordering.
+    if let Some(idx) = presets.iter().position(|t| t.default) {
+        presets.swap(0, idx);
+    }
+
+    presets
+}
+
+fn load_themes_from_dir(dir: &Path, presets: &mut Vec<ThemePreset>) {
+    let Ok(entries) = fs::read_dir(dir) else {
+        return;
+    };
+    let mut paths: Vec<PathBuf> = entries
+        .filter_map(|e| e.ok().map(|e| e.path()))
+        .filter(|p| p.extension().and_then(|e| e.to_str()) == Some("json"))
+        .collect();
+    paths.sort();
+    for path in paths {
+        if let Some(preset) = load_theme_file(&path) {
+            upsert_theme(presets, preset);
+        }
+    }
+}
+
+fn upsert_theme(presets: &mut Vec<ThemePreset>, preset: ThemePreset) {
+    if let Some(existing) = presets.iter_mut().find(|t| t.id == preset.id) {
+        *existing = preset;
+    } else {
+        presets.push(preset);
+    }
+}
+
+fn load_theme_file(path: &Path) -> Option<ThemePreset> {
+    let raw = fs::read_to_string(path)
+        .map_err(|e| eprintln!("el-terminal: failed to read {}: {e}", path.display()))
+        .ok()?;
+    let mut preset: ThemePreset = serde_json::from_str(&raw)
+        .map_err(|e| eprintln!("el-terminal: invalid theme {}: {e}", path.display()))
+        .ok()?;
+    if preset.id.trim().is_empty() {
+        preset.id = path
+            .file_stem()
+            .and_then(|s| s.to_str())
+            .unwrap_or("theme")
+            .to_string();
+    }
+    if preset.label.trim().is_empty() {
+        preset.label = preset.id.clone();
+    }
+    preset.style.normalize();
+    Some(preset)
+}
+
+/// Candidate dirs for shipped themes (later dirs override earlier on same `id`).
+fn bundled_themes_dirs() -> Vec<PathBuf> {
+    let mut dirs = Vec::new();
+
+    dirs.push(PathBuf::from("/usr/share/el-terminal/themes"));
+    dirs.push(PathBuf::from("/usr/local/share/el-terminal/themes"));
+
+    if let Ok(exe) = std::env::current_exe() {
+        if let Some(parent) = exe.parent() {
+            dirs.push(parent.join("../share/el-terminal/themes"));
+            dirs.push(parent.join("themes"));
         }
     }
 
-    fn nord() -> Self {
-        Self {
-            window_radius: 12.0,
-            window_border: [0.847, 0.870, 0.914, 0.22], // #d8dee9
-            chrome_fill: [0.180, 0.204, 0.251, 0.93],   // #2e3440
-            tab_radius: 999.0,
-            tab_border: "transparent".into(),
-            tab_border_active: "#88c0d0".into(),
-            bg_glass: "alpha(#2e3440, 0.55)".into(),
-            bg_tab: "alpha(#3b4252, 0.55)".into(),
-            fg_primary: "#d8dee9".into(),
-            fg_muted: "#4c566a".into(),
-            accent_green: "#a3be8c".into(),
-            accent_blue: "#81a1c1".into(),
-            accent_purple: "#b48ead".into(),
-            border_subtle: "alpha(#d8dee9, 0.12)".into(),
-            popover_bg: "alpha(#3b4252, 0.94)".into(),
-            settings_bg: "alpha(#3b4252, 0.96)".into(),
-            ask_panel_bg: "alpha(#2e3440, 0.94)".into(),
-            ask_prompt_bg: "alpha(#2e3440, 0.55)".into(),
-            danger: "#bf616a".into(),
-            warning: "#ebcb8b".into(),
-            terminal_fg: "#d8dee9".into(),
-            terminal_bg: [0.180, 0.204, 0.251, 0.55],
-            palette: [
-                "#3b4252".into(),
-                "#bf616a".into(),
-                "#a3be8c".into(),
-                "#ebcb8b".into(),
-                "#81a1c1".into(),
-                "#b48ead".into(),
-                "#88c0d0".into(),
-                "#e5e9f0".into(),
-                "#4c566a".into(),
-                "#bf616a".into(),
-                "#a3be8c".into(),
-                "#ebcb8b".into(),
-                "#81a1c1".into(),
-                "#b48ead".into(),
-                "#8fbcbb".into(),
-                "#eceff4".into(),
-            ],
-        }
-    }
+    // Dev builds: repo `themes/` wins over system installs.
+    dirs.push(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("themes"));
 
-    fn solarized_dark() -> Self {
-        Self {
-            window_radius: 12.0,
-            window_border: [0.514, 0.580, 0.588, 0.22], // #839496
-            chrome_fill: [0.000, 0.169, 0.212, 0.93],   // #002b36
-            tab_radius: 999.0,
-            tab_border: "transparent".into(),
-            tab_border_active: "#2aa198".into(),
-            bg_glass: "alpha(#002b36, 0.55)".into(),
-            bg_tab: "alpha(#073642, 0.55)".into(),
-            fg_primary: "#839496".into(),
-            fg_muted: "#586e75".into(),
-            accent_green: "#859900".into(),
-            accent_blue: "#268bd2".into(),
-            accent_purple: "#6c71c4".into(),
-            border_subtle: "alpha(#839496, 0.14)".into(),
-            popover_bg: "alpha(#073642, 0.94)".into(),
-            settings_bg: "alpha(#073642, 0.96)".into(),
-            ask_panel_bg: "alpha(#002b36, 0.94)".into(),
-            ask_prompt_bg: "alpha(#002b36, 0.55)".into(),
-            danger: "#dc322f".into(),
-            warning: "#b58900".into(),
-            terminal_fg: "#839496".into(),
-            terminal_bg: [0.000, 0.169, 0.212, 0.55],
-            palette: [
-                "#073642".into(),
-                "#dc322f".into(),
-                "#859900".into(),
-                "#b58900".into(),
-                "#268bd2".into(),
-                "#d33682".into(),
-                "#2aa198".into(),
-                "#eee8d5".into(),
-                "#002b36".into(),
-                "#cb4b16".into(),
-                "#586e75".into(),
-                "#657b83".into(),
-                "#839496".into(),
-                "#6c71c4".into(),
-                "#93a1a1".into(),
-                "#fdf6e3".into(),
-            ],
-        }
-    }
+    dirs
+}
 
-    fn light() -> Self {
-        Self {
-            window_radius: 12.0,
-            window_border: [0.102, 0.114, 0.137, 0.18], // #1a1d23
-            chrome_fill: [0.961, 0.965, 0.973, 0.95],   // #f5f6f8
-            tab_radius: 999.0,
-            tab_border: "transparent".into(),
-            tab_border_active: "#2f9e6e".into(),
-            bg_glass: "alpha(#f5f6f8, 0.85)".into(),
-            bg_tab: "alpha(#e6e8eb, 0.75)".into(),
-            fg_primary: "#1a1d23".into(),
-            fg_muted: "#6b7280".into(),
-            accent_green: "#2f9e6e".into(),
-            accent_blue: "#3b82c4".into(),
-            accent_purple: "#8b6cc7".into(),
-            border_subtle: "alpha(#1a1d23, 0.12)".into(),
-            popover_bg: "alpha(#ffffff, 0.96)".into(),
-            settings_bg: "alpha(#ffffff, 0.98)".into(),
-            ask_panel_bg: "alpha(#f5f6f8, 0.96)".into(),
-            ask_prompt_bg: "alpha(#e6e8eb, 0.70)".into(),
-            danger: "#e35d6a".into(),
-            warning: "#b08900".into(),
-            terminal_fg: "#1a1d23".into(),
-            terminal_bg: [0.961, 0.965, 0.973, 0.85],
-            palette: [
-                "#1a1d23".into(),
-                "#e35d6a".into(),
-                "#2f9e6e".into(),
-                "#b08900".into(),
-                "#3b82c4".into(),
-                "#8b6cc7".into(),
-                "#2a9d8f".into(),
-                "#e6e8eb".into(),
-                "#6b7280".into(),
-                "#ef7a84".into(),
-                "#3dd68c".into(),
-                "#e5c07b".into(),
-                "#6cb6ff".into(),
-                "#b794f6".into(),
-                "#56b6c2".into(),
-                "#ffffff".into(),
-            ],
-        }
-    }
+pub fn user_themes_dir() -> PathBuf {
+    dirs::config_dir()
+        .unwrap_or_else(|| PathBuf::from("."))
+        .join("el-terminal")
+        .join("themes")
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -368,8 +324,10 @@ pub struct AppSettings {
 
 impl Default for AppSettings {
     fn default() -> Self {
+        let theme = default_theme_id();
         Self {
-            theme: "glass-dark".into(),
+            style: ThemeStyle::preset(&theme),
+            theme,
             font_size: FONT_SIZE_DEFAULT,
             font_family: "JetBrains Mono".into(),
             llm_endpoint: "https://api.openai.com/v1".into(),
@@ -377,7 +335,6 @@ impl Default for AppSettings {
             llm_model: "gpt-4o-mini".into(),
             ask_prefix: ASK_PREFIX_DEFAULT.into(),
             ask_share_terminal_context: false,
-            style: ThemeStyle::preset("glass-dark"),
         }
     }
 }
@@ -389,8 +346,8 @@ impl AppSettings {
 
     pub fn normalize(&mut self) {
         self.font_size = Self::clamp_font_size(self.font_size);
-        if !THEME_IDS.contains(&self.theme.as_str()) {
-            self.theme = "glass-dark".into();
+        if theme_by_id(&self.theme).is_none() {
+            self.theme = default_theme_id();
         }
         if self.font_family.trim().is_empty() {
             self.font_family = "JetBrains Mono".into();
@@ -413,13 +370,13 @@ impl AppSettings {
 
     /// Apply a named theme preset, replacing `style` with that pack.
     pub fn apply_theme_preset(&mut self, theme_id: &str) {
-        let id = if THEME_IDS.contains(&theme_id) {
-            theme_id
+        let id = if theme_by_id(theme_id).is_some() {
+            theme_id.to_string()
         } else {
-            "glass-dark"
+            default_theme_id()
         };
-        self.theme = id.into();
-        self.style = ThemeStyle::preset(id);
+        self.theme = id.clone();
+        self.style = ThemeStyle::preset(&id);
         self.style.normalize();
     }
 

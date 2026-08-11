@@ -1,0 +1,59 @@
+{
+  "id": "base16-isotope-dark",
+  "label": "Isotope (dark)",
+  "window_radius": 12.0,
+  "window_border": [
+    0.816,
+    0.816,
+    0.816,
+    0.22
+  ],
+  "chrome_fill": [
+    0.0,
+    0.0,
+    0.0,
+    0.93
+  ],
+  "tab_radius": 8.0,
+  "tab_border": "transparent",
+  "tab_border_active": "#00ffff",
+  "bg_glass": "alpha(#000000, 0.55)",
+  "bg_tab": "alpha(#000000, 0.55)",
+  "fg_primary": "#d0d0d0",
+  "fg_muted": "#808080",
+  "accent_green": "#33ff00",
+  "accent_blue": "#0066ff",
+  "accent_purple": "#cc00ff",
+  "border_subtle": "alpha(#d0d0d0, 0.12)",
+  "popover_bg": "alpha(#000000, 0.94)",
+  "settings_bg": "alpha(#000000, 0.96)",
+  "ask_panel_bg": "alpha(#000000, 0.94)",
+  "ask_prompt_bg": "alpha(#000000, 0.55)",
+  "danger": "#ff0000",
+  "warning": "#ff0099",
+  "terminal_fg": "#d0d0d0",
+  "terminal_bg": [
+    0.0,
+    0.0,
+    0.0,
+    0.55
+  ],
+  "palette": [
+    "#000000",
+    "#ff0000",
+    "#33ff00",
+    "#ff0099",
+    "#0066ff",
+    "#cc00ff",
+    "#00ffff",
+    "#d0d0d0",
+    "#808080",
+    "#ff0000",
+    "#33ff00",
+    "#ff0099",
+    "#0066ff",
+    "#cc00ff",
+    "#00ffff",
+    "#ffffff"
+  ]
+}

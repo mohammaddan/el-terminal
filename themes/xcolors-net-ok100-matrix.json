@@ -1,0 +1,59 @@
+{
+  "id": "xcolors-net-ok100-matrix",
+  "label": "Matrix",
+  "window_radius": 12.0,
+  "window_border": [
+    0.0,
+    0.8,
+    0.0,
+    0.22
+  ],
+  "chrome_fill": [
+    0.0,
+    0.0,
+    0.0,
+    0.93
+  ],
+  "tab_radius": 8.0,
+  "tab_border": "transparent",
+  "tab_border_active": "#00cc00",
+  "bg_glass": "alpha(#000000, 0.55)",
+  "bg_tab": "alpha(#000000, 0.55)",
+  "fg_primary": "#00cc00",
+  "fg_muted": "#000000",
+  "accent_green": "#00cc00",
+  "accent_blue": "#005500",
+  "accent_purple": "#55ff55",
+  "border_subtle": "alpha(#00cc00, 0.12)",
+  "popover_bg": "alpha(#000000, 0.94)",
+  "settings_bg": "alpha(#000000, 0.96)",
+  "ask_panel_bg": "alpha(#000000, 0.94)",
+  "ask_prompt_bg": "alpha(#000000, 0.55)",
+  "danger": "#55ff55",
+  "warning": "#00cc00",
+  "terminal_fg": "#00cc00",
+  "terminal_bg": [
+    0.0,
+    0.0,
+    0.0,
+    0.55
+  ],
+  "palette": [
+    "#000000",
+    "#55ff55",
+    "#00cc00",
+    "#00cc00",
+    "#005500",
+    "#55ff55",
+    "#00cc00",
+    "#00cc00",
+    "#000000",
+    "#55ff55",
+    "#55ff55",
+    "#55ff55",
+    "#005500",
+    "#55ff55",
+    "#55ff55",
+    "#00cc00"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "base16-codeschool-dark",
+  "label": "Codeschool (dark)",
+  "window_radius": 12.0,
+  "window_border": [
+    0.62,
+    0.655,
+    0.651,
+    0.22
+  ],
+  "chrome_fill": [
+    0.137,
+    0.173,
+    0.192,
+    0.93
+  ],
+  "tab_radius": 8.0,
+  "tab_border": "transparent",
+  "tab_border_active": "#b02f30",
+  "bg_glass": "alpha(#232c31, 0.55)",
+  "bg_tab": "alpha(#232c31, 0.55)",
+  "fg_primary": "#9ea7a6",
+  "fg_muted": "#3f4944",
+  "accent_green": "#237986",
+  "accent_blue": "#484d79",
+  "accent_purple": "#c59820",
+  "border_subtle": "alpha(#9ea7a6, 0.12)",
+  "popover_bg": "alpha(#232c31, 0.94)",
+  "settings_bg": "alpha(#232c31, 0.96)",
+  "ask_panel_bg": "alpha(#232c31, 0.94)",
+  "ask_prompt_bg": "alpha(#232c31, 0.55)",
+  "danger": "#2a5491",
+  "warning": "#a03b1e",
+  "terminal_fg": "#9ea7a6",
+  "terminal_bg": [
+    0.137,
+    0.173,
+    0.192,
+    0.55
+  ],
+  "palette": [
+    "#232c31",
+    "#2a5491",
+    "#237986",
+    "#a03b1e",
+    "#484d79",
+    "#c59820",
+    "#b02f30",
+    "#9ea7a6",
+    "#3f4944",
+    "#2a5491",
+    "#237986",
+    "#a03b1e",
+    "#484d79",
+    "#c59820",
+    "#b02f30",
+    "#b5d8f6"
+  ]
+}

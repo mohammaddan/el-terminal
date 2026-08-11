@@ -1,0 +1,59 @@
+{
+  "id": "xcolors-net-dkeg-catchmeifyoucan",
+  "label": "Catch Me If You Can",
+  "window_radius": 12.0,
+  "window_border": [
+    0.976,
+    0.976,
+    0.976,
+    0.22
+  ],
+  "chrome_fill": [
+    0.09,
+    0.059,
+    0.051,
+    0.93
+  ],
+  "tab_radius": 8.0,
+  "tab_border": "transparent",
+  "tab_border_active": "#c4bfbf",
+  "bg_glass": "alpha(#170f0d, 0.55)",
+  "bg_tab": "alpha(#130f0c, 0.55)",
+  "fg_primary": "#f9f9f9",
+  "fg_muted": "#c69f77",
+  "accent_green": "#8d7f85",
+  "accent_blue": "#aa8d70",
+  "accent_purple": "#b9a38d",
+  "border_subtle": "alpha(#f9f9f9, 0.12)",
+  "popover_bg": "alpha(#130f0c, 0.94)",
+  "settings_bg": "alpha(#130f0c, 0.96)",
+  "ask_panel_bg": "alpha(#170f0d, 0.94)",
+  "ask_prompt_bg": "alpha(#170f0d, 0.55)",
+  "danger": "#604c38",
+  "warning": "#907256",
+  "terminal_fg": "#f9f9f9",
+  "terminal_bg": [
+    0.09,
+    0.059,
+    0.051,
+    0.55
+  ],
+  "palette": [
+    "#130f0c",
+    "#604c38",
+    "#8d7f85",
+    "#907256",
+    "#aa8d70",
+    "#b9a38d",
+    "#c4bfbf",
+    "#c4ae99",
+    "#c69f77",
+    "#cab9a8",
+    "#d5c6b8",
+    "#dcd1c7",
+    "#e0e0e2",
+    "#e4dad2",
+    "#eae3dc",
+    "#f6f2f0"
+  ]
+}

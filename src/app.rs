@@ -89,8 +89,8 @@ pub fn build_ui(app: &Application) {
 
     let tab_strip = GtkBox::new(Orientation::Horizontal, 4);
     tab_strip.add_css_class("tab-strip");
-    tab_strip.set_hexpand(true);
     tab_strip.set_halign(gtk4::Align::Start);
+    tab_strip.set_visible(false);
 
     let new_tab_btn = tab_bar::build_new_tab_button();
     let ask_btn = ask::build_ask_button();
@@ -99,17 +99,22 @@ pub fn build_ui(app: &Application) {
     let (window_controls, minimize_btn, maximize_btn, close_win_btn) =
         tab_bar::build_window_controls();
 
-    let right = GtkBox::new(Orientation::Horizontal, 6);
-    right.set_halign(gtk4::Align::End);
-    right.set_valign(gtk4::Align::Center);
-    right.append(&ask_btn);
-    right.append(&menu_btn);
-    right.append(&status_dot);
-    right.append(&window_controls);
+    let chrome_actions = GtkBox::new(Orientation::Horizontal, 6);
+    chrome_actions.set_valign(gtk4::Align::Center);
+    chrome_actions.append(&new_tab_btn);
+    chrome_actions.append(&ask_btn);
+    chrome_actions.append(&menu_btn);
+    chrome_actions.append(&status_dot);
+    chrome_actions.append(&window_controls);
+
+    // GTK4 Box packs start→end; Align::End does not push widgets right.
+    // An expanding spacer keeps chrome actions on the right when the tab strip is hidden.
+    let spacer = GtkBox::new(Orientation::Horizontal, 0);
+    spacer.set_hexpand(true);
 
     top_bar.append(&tab_strip);
-    top_bar.append(&new_tab_btn);
-    top_bar.append(&right);
+    top_bar.append(&spacer);
+    top_bar.append(&chrome_actions);
 
     let host = GtkBox::new(Orientation::Vertical, 0);
     host.add_css_class("terminal-host");
@@ -535,6 +540,14 @@ fn open_settings(state: &Rc<AppState>) {
         clone!(
             #[strong]
             state,
+            move |preview| {
+                *state.settings.borrow_mut() = preview;
+                apply_settings_to_all(&state);
+            }
+        ),
+        clone!(
+            #[strong]
+            state,
             move |new_settings| {
                 if let Err(err) = new_settings.save() {
                     eprintln!("failed to save settings: {err}");
@@ -614,6 +627,11 @@ fn next_id(state: &AppState) -> u32 {
     id
 }
 
+fn update_tabs_visibility(state: &AppState) {
+    let show = state.tabs.borrow().len() > 1;
+    state.tab_strip.set_visible(show);
+}
+
 fn add_tab(state: &Rc<AppState>) {
     let id = next_id(state);
     let name = format!("tab-{id}");
@@ -685,6 +703,7 @@ fn add_tab(state: &Rc<AppState>) {
         label,
     });
 
+    update_tabs_visibility(state);
     select_tab_by_name(state, &name);
     terminal.grab_focus();
 }
@@ -1137,6 +1156,7 @@ fn close_tab_by_name(state: &Rc<AppState>, name: &str) {
     if let Some(name) = next_name {
         select_tab_by_name(state, &name);
     }
+    update_tabs_visibility(state);
 }
 
 fn reset_last_tab(state: &Rc<AppState>) {

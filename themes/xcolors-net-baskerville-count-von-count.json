@@ -1,0 +1,59 @@
+{
+  "id": "xcolors-net-baskerville-count-von-count",
+  "label": "Count Von Count",
+  "window_radius": 12.0,
+  "window_border": [
+    0.569,
+    0.569,
+    0.569,
+    0.22
+  ],
+  "chrome_fill": [
+    0.0,
+    0.0,
+    0.0,
+    0.93
+  ],
+  "tab_radius": 8.0,
+  "tab_border": "transparent",
+  "tab_border_active": "#9a413d",
+  "bg_glass": "alpha(#000000, 0.55)",
+  "bg_tab": "alpha(#303030, 0.55)",
+  "fg_primary": "#919191",
+  "fg_muted": "#5e5e5e",
+  "accent_green": "#a83334",
+  "accent_blue": "#8c4b46",
+  "accent_purple": "#7d534f",
+  "border_subtle": "alpha(#919191, 0.12)",
+  "popover_bg": "alpha(#303030, 0.94)",
+  "settings_bg": "alpha(#303030, 0.96)",
+  "ask_panel_bg": "alpha(#000000, 0.94)",
+  "ask_prompt_bg": "alpha(#000000, 0.55)",
+  "danger": "#c10023",
+  "warning": "#b51d2c",
+  "terminal_fg": "#919191",
+  "terminal_bg": [
+    0.0,
+    0.0,
+    0.0,
+    0.55
+  ],
+  "palette": [
+    "#303030",
+    "#c10023",
+    "#a83334",
+    "#b51d2c",
+    "#8c4b46",
+    "#7d534f",
+    "#9a413d",
+    "#c6c6c6",
+    "#5e5e5e",
+    "#ff8781",
+    "#ffa095",
+    "#ff948b",
+    "#feb2aa",
+    "#ebbbb5",
+    "#ffaaa0",
+    "#ffffff"
+  ]
+}

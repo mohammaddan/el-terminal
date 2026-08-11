@@ -1,0 +1,59 @@
+{
+  "id": "xcolors-net-muzieca-mono",
+  "label": "Mono",
+  "window_radius": 12.0,
+  "window_border": [
+    1.0,
+    1.0,
+    1.0,
+    0.22
+  ],
+  "chrome_fill": [
+    0.0,
+    0.0,
+    0.0,
+    0.93
+  ],
+  "tab_radius": 8.0,
+  "tab_border": "transparent",
+  "tab_border_active": "#666666",
+  "bg_glass": "alpha(#000000, 0.55)",
+  "bg_tab": "alpha(#000000, 0.55)",
+  "fg_primary": "#ffffff",
+  "fg_muted": "#090909",
+  "accent_green": "#222222",
+  "accent_blue": "#444444",
+  "accent_purple": "#555555",
+  "border_subtle": "alpha(#ffffff, 0.12)",
+  "popover_bg": "alpha(#000000, 0.94)",
+  "settings_bg": "alpha(#000000, 0.96)",
+  "ask_panel_bg": "alpha(#000000, 0.94)",
+  "ask_prompt_bg": "alpha(#000000, 0.55)",
+  "danger": "#111111",
+  "warning": "#333333",
+  "terminal_fg": "#ffffff",
+  "terminal_bg": [
+    0.0,
+    0.0,
+    0.0,
+    0.55
+  ],
+  "palette": [
+    "#000000",
+    "#111111",
+    "#222222",
+    "#333333",
+    "#444444",
+    "#555555",
+    "#666666",
+    "#777777",
+    "#090909",
+    "#181818",
+    "#272727",
+    "#393939",
+    "#484848",
+    "#595959",
+    "#707070",
+    "#818181"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "xcolors-net-rooster-sos",
+  "label": "SOS",
+  "window_radius": 12.0,
+  "window_border": [
+    0.471,
+    0.475,
+    0.435,
+    0.22
+  ],
+  "chrome_fill": [
+    0.216,
+    0.231,
+    0.263,
+    0.93
+  ],
+  "tab_radius": 8.0,
+  "tab_border": "transparent",
+  "tab_border_active": "#63e860",
+  "bg_glass": "alpha(#373b43, 0.55)",
+  "bg_tab": "alpha(#373b43, 0.55)",
+  "fg_primary": "#78796f",
+  "fg_muted": "#373b43",
+  "accent_green": "#fbfd59",
+  "accent_blue": "#afb171",
+  "accent_purple": "#b387e7",
+  "border_subtle": "alpha(#78796f, 0.12)",
+  "popover_bg": "alpha(#373b43, 0.94)",
+  "settings_bg": "alpha(#373b43, 0.96)",
+  "ask_panel_bg": "alpha(#373b43, 0.94)",
+  "ask_prompt_bg": "alpha(#373b43, 0.55)",
+  "danger": "#fdcd39",
+  "warning": "#deac40",
+  "terminal_fg": "#78796f",
+  "terminal_bg": [
+    0.216,
+    0.231,
+    0.263,
+    0.55
+  ],
+  "palette": [
+    "#373b43",
+    "#fdcd39",
+    "#fbfd59",
+    "#deac40",
+    "#afb171",
+    "#b387e7",
+    "#63e860",
+    "#efdecb",
+    "#373b43",
+    "#fdcd39",
+    "#fbfd59",
+    "#deac40",
+    "#afb171",
+    "#b387e7",
+    "#63e860",
+    "#efdecb"
+  ]
+}

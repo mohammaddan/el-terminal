@@ -1,6 +1,6 @@
 [package]
 name = "el-terminal"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2021"
 description = "El-Terminal — lightweight borderless terminal emulator (GTK4 + VTE)"
 license = "MIT"
@@ -45,6 +45,11 @@ assets = [
         "usr/share/doc/el-terminal/",
         "644",
     ],
+    [
+        "themes/*",
+        "usr/share/el-terminal/themes/",
+        "644",
+    ],
 ]
 
 [package.metadata.deb.variants.nautilus]
@@ -66,7 +71,7 @@ assets = [
 ]
 
 [dependencies]
-gtk4 = "0.9"
+gtk4 = { version = "0.9", features = ["v4_12"] }
 vte4 = { version = "0.8", features = ["v0_72"] }
 glib = "0.20"
 pango = "0.20"

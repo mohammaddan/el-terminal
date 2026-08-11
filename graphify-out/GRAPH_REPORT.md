@@ -1,16 +1,16 @@
-# Graph Report - terminal-emulator  (2026-08-06)
+# Graph Report - terminal-emulator  (2026-08-11)
 
 ## Corpus Check
-- 21 files · ~82,765 words
+- 183 files · ~98,044 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 325 nodes · 672 edges · 21 communities (17 shown, 4 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.8)
+- 344 nodes · 730 edges · 21 communities (17 shown, 4 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `7da655a3`
+- Built from commit: `9b6843cb`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -24,7 +24,7 @@
 - [[_COMMUNITY_build_ui|build_ui]]
 - [[_COMMUNITY_blur.rs|blur.rs]]
 - [[_COMMUNITY_app.rs|app.rs]]
-- [[_COMMUNITY_hit_interactive_child|hit_interactive_child]]
+- [[_COMMUNITY_open_settings_dialog|open_settings_dialog]]
 - [[_COMMUNITY_main.rs|main.rs]]
 - [[_COMMUNITY_env_context.rs|env_context.rs]]
 - [[_COMMUNITY_postinst|postinst]]
@@ -37,28 +37,28 @@
 - [[_COMMUNITY_AppSettings|AppSettings]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `AppState` - 36 edges
+1. `AppState` - 37 edges
 2. `AppSettings` - 24 edges
 3. `AskPanel` - 20 edges
-4. `ThemeStyle` - 14 edges
-5. `parse_reply()` - 13 edges
-6. `build_ui()` - 11 edges
-7. `TerminalContext` - 10 edges
-8. `ask()` - 10 edges
-9. `parse_commands()` - 10 edges
-10. `extract_assistant_content()` - 10 edges
+4. `parse_reply()` - 13 edges
+5. `build_ui()` - 11 edges
+6. `ThemeStyle` - 11 edges
+7. `open_settings_dialog()` - 11 edges
+8. `TerminalContext` - 10 edges
+9. `ask()` - 10 edges
+10. `parse_commands()` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `run_shell_ask()` --calls--> `open_settings()`  [INFERRED]
   src/ask.rs → src/app.rs
+- `open_settings_dialog()` --calls--> `theme_ids()`  [INFERRED]
+  src/settings_ui.rs → src/settings.rs
+- `open_settings_dialog()` --calls--> `theme_labels()`  [INFERRED]
+  src/settings_ui.rs → src/settings.rs
 - `AppState` --references--> `AskPanel`  [EXTRACTED]
   src/app.rs → src/ask.rs
 - `AppState` --references--> `ChromeBackground`  [EXTRACTED]
   src/app.rs → src/chrome.rs
-- `AppState` --references--> `AppSettings`  [EXTRACTED]
-  src/app.rs → src/settings.rs
-- `run_shell_ask()` --references--> `AppSettings`  [EXTRACTED]
-  src/ask.rs → src/settings.rs
 
 ## Import Cycles
 - None detected.
@@ -67,7 +67,7 @@
 
 ### Community 0 - "terminal_tab.rs"
 Cohesion: 0.20
-Nodes (20): Path, RGBA, apply_font(), apply_palette(), copy_selection(), create_terminal(), create_terminal_with(), default_title() (+12 more)
+Nodes (20): RGBA, apply_font(), apply_palette(), copy_selection(), create_terminal(), create_terminal_with(), default_title(), feed_output() (+12 more)
 
 ### Community 1 - "tab_bar.rs"
 Cohesion: 0.36
@@ -87,7 +87,7 @@ Nodes (13): Ask AI setup, Build & run, CLI, Default terminal, Dependencies, Desk
 
 ### Community 5 - "Tab"
 Cohesion: 0.11
-Nodes (48): Application, Cell, CssProvider, Orientation, Paned, active_terminal(), add_tab(), adjust_font_size() (+40 more)
+Nodes (49): Application, Cell, CssProvider, Orientation, Paned, active_terminal(), add_tab(), adjust_font_size() (+41 more)
 
 ### Community 6 - "build_ui"
 Cohesion: 0.16
@@ -101,9 +101,9 @@ Nodes (24): Connection, Dispatch, Event, EventQueue, ExtBackgroundEffectManagerV
 Cohesion: 0.17
 Nodes (15): Context, DrawingArea, ImageSurface, build_chrome_background(), build_noise_surface(), ChromeBackground, ChromePaint, hash2() (+7 more)
 
-### Community 9 - "hit_interactive_child"
-Cohesion: 0.28
-Nodes (8): labeled_row(), open_settings_dialog(), Fn, GtkBox, IsA, Label, section_label(), Window
+### Community 9 - "open_settings_dialog"
+Cohesion: 0.17
+Nodes (15): DropDown, find_descendant(), labeled_row(), open_settings_dialog(), Fn, GtkBox, IsA, Label (+7 more)
 
 ### Community 11 - "main.rs"
 Cohesion: 0.43
@@ -126,8 +126,8 @@ Cohesion: 0.90
 Nodes (4): bad(), ok(), run_cwd_case(), test-desktop-integration.sh script
 
 ### Community 20 - "AppSettings"
-Cohesion: 0.16
-Nodes (9): AppSettings, default_ask_prefix(), default_theme_style(), Default, PathBuf, Result, Self, String (+1 more)
+Cohesion: 0.14
+Nodes (24): AppSettings, bundled_themes_dirs(), default_ask_prefix(), default_theme_id(), default_theme_style(), load_theme_catalog(), load_theme_file(), load_themes_from_dir() (+16 more)
 
 ## Knowledge Gaps
 - **11 isolated node(s):** `Features`, `Shortcuts`, `Dependencies`, `Build & run`, `CLI` (+6 more)
@@ -137,12 +137,12 @@ Nodes (9): AppSettings, default_ask_prefix(), default_theme_style(), Default, Pa
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `AppSettings` connect `AppSettings` to `terminal_tab.rs`, `Rc`, `Tab`, `build_ui`, `hit_interactive_child`?**
-  _High betweenness centrality (0.156) - this node is a cross-community bridge._
-- **Why does `AppState` connect `Tab` to `app.rs`, `Rc`, `AppSettings`?**
-  _High betweenness centrality (0.108) - this node is a cross-community bridge._
+- **Why does `AppSettings` connect `AppSettings` to `terminal_tab.rs`, `Rc`, `Tab`, `build_ui`, `open_settings_dialog`?**
+  _High betweenness centrality (0.162) - this node is a cross-community bridge._
 - **Why does `TerminalContext` connect `env_context.rs` to `Rc`, `build_ui`?**
-  _High betweenness centrality (0.105) - this node is a cross-community bridge._
+  _High betweenness centrality (0.102) - this node is a cross-community bridge._
+- **Why does `AppState` connect `Tab` to `app.rs`, `Rc`, `AppSettings`?**
+  _High betweenness centrality (0.099) - this node is a cross-community bridge._
 - **What connects `Features`, `Shortcuts`, `Dependencies` to the rest of the system?**
   _11 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Rc` be split into smaller, more focused modules?**
@@ -150,4 +150,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `Terminal Emulator` be split into smaller, more focused modules?**
   _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._
 - **Should `Tab` be split into smaller, more focused modules?**
-  _Cohesion score 0.10629251700680271 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.10530612244897959 - nodes in this community are weakly interconnected._

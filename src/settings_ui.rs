@@ -1,15 +1,24 @@
-use crate::settings::{AppSettings, FONT_SIZE_MAX, FONT_SIZE_MIN, THEME_IDS, THEME_LABELS};
-use gtk4::glib::clone;
+use crate::settings::{
+    default_theme_id, theme_ids, theme_labels, AppSettings, FONT_SIZE_MAX, FONT_SIZE_MIN,
+};
+use gtk4::glib::{self, clone};
 use gtk4::prelude::*;
 use gtk4::{
-    Align, Box as GtkBox, Button, CheckButton, Dialog, DropDown, Entry, Label, Orientation,
-    PasswordEntry, SpinButton, Window,
+    Align, Box as GtkBox, Button, CheckButton, Dialog, DropDown, Entry,
+    EventControllerScroll, EventControllerScrollFlags, Label, ListScrollFlags, ListView,
+    Orientation, PasswordEntry, SpinButton, Widget, Window,
 };
+use std::cell::Cell;
+use std::rc::Rc;
 
-/// Open the Settings dialog. On Save, updates `settings` via `on_save`.
+/// Open the Settings dialog.
+///
+/// - `on_preview` applies settings live (theme changes) without writing disk.
+/// - `on_save` persists and applies the final settings.
 pub fn open_settings_dialog(
     parent: &impl IsA<Window>,
     current: &AppSettings,
+    on_preview: impl Fn(AppSettings) + 'static,
     on_save: impl Fn(AppSettings) + 'static,
 ) {
     let dialog = Dialog::builder()
@@ -32,14 +41,18 @@ pub fn open_settings_dialog(
     content.append(&section_label("Appearance"));
 
     let theme_row = labeled_row("Theme");
-    let theme_strings: Vec<&str> = THEME_LABELS.to_vec();
-    let theme_dropdown = DropDown::from_strings(&theme_strings);
-    let theme_idx = THEME_IDS
+    let theme_id_list = theme_ids();
+    let theme_label_list = theme_labels();
+    let theme_label_refs: Vec<&str> = theme_label_list.iter().map(|s| s.as_str()).collect();
+    let theme_dropdown = DropDown::from_strings(&theme_label_refs);
+    let theme_idx = theme_id_list
         .iter()
-        .position(|id| *id == current.theme.as_str())
+        .position(|id| id == &current.theme)
         .unwrap_or(0) as u32;
     theme_dropdown.set_selected(theme_idx);
     theme_dropdown.set_hexpand(true);
+    wire_theme_dropdown_wheel(&theme_dropdown);
+    wire_theme_dropdown_scroll_to_active(&theme_dropdown);
     theme_row.append(&theme_dropdown);
     content.append(&theme_row);
 
@@ -130,11 +143,40 @@ pub fn open_settings_dialog(
     dialog.set_child(Some(&content));
 
     let previous = current.clone();
+    let committed = Rc::new(Cell::new(false));
+    let on_preview = Rc::new(on_preview);
+
+    // Connect after set_selected so the initial value does not fire a preview.
+    theme_dropdown.connect_selected_notify(clone!(
+        #[strong]
+        previous,
+        #[strong]
+        on_preview,
+        move |dropdown| {
+            let idx = dropdown.selected() as usize;
+            let theme = theme_ids()
+                .get(idx)
+                .cloned()
+                .unwrap_or_else(default_theme_id);
+            let mut settings = previous.clone();
+            settings.apply_theme_preset(&theme);
+            on_preview(settings);
+        }
+    ));
 
     cancel.connect_clicked(clone!(
         #[strong]
         dialog,
+        #[strong]
+        previous,
+        #[strong]
+        on_preview,
+        #[strong]
+        committed,
         move |_| {
+            if !committed.get() {
+                on_preview(previous.clone());
+            }
             dialog.close();
         }
     ));
@@ -158,13 +200,16 @@ pub fn open_settings_dialog(
         prefix_entry,
         #[strong]
         share_ctx,
+        #[strong]
+        previous,
+        #[strong]
+        committed,
         move |_| {
             let idx = theme_dropdown.selected() as usize;
-            let theme = THEME_IDS
+            let theme = theme_ids()
                 .get(idx)
-                .copied()
-                .unwrap_or("glass-dark")
-                .to_string();
+                .cloned()
+                .unwrap_or_else(default_theme_id);
 
             let mut settings = previous.clone();
             if theme != settings.theme {
@@ -178,8 +223,24 @@ pub fn open_settings_dialog(
             settings.ask_prefix = prefix_entry.text().to_string();
             settings.ask_share_terminal_context = share_ctx.is_active();
             settings.normalize();
+            committed.set(true);
             on_save(settings);
             dialog.close();
+        }
+    ));
+
+    dialog.connect_close_request(clone!(
+        #[strong]
+        previous,
+        #[strong]
+        on_preview,
+        #[strong]
+        committed,
+        move |_| {
+            if !committed.get() {
+                on_preview(previous.clone());
+            }
+            glib::Propagation::Proceed
         }
     ));
 
@@ -204,4 +265,97 @@ fn labeled_row(title: &str) -> GtkBox {
     label.add_css_class("settings-label");
     row.append(&label);
     row
+}
+
+/// Mouse wheel over the closed theme dropdown cycles the selection (and live preview).
+fn wire_theme_dropdown_wheel(dropdown: &DropDown) {
+    let scroll = EventControllerScroll::new(
+        EventControllerScrollFlags::VERTICAL | EventControllerScrollFlags::DISCRETE,
+    );
+    scroll.connect_scroll(clone!(
+        #[strong]
+        dropdown,
+        move |_, _dx, dy| {
+            let n = dropdown.model().map(|m| m.n_items()).unwrap_or(0);
+            if n == 0 {
+                return glib::Propagation::Proceed;
+            }
+            let cur = dropdown.selected();
+            if dy > 0.0 && cur + 1 < n {
+                dropdown.set_selected(cur + 1);
+                return glib::Propagation::Stop;
+            }
+            if dy < 0.0 && cur > 0 {
+                dropdown.set_selected(cur - 1);
+                return glib::Propagation::Stop;
+            }
+            glib::Propagation::Proceed
+        }
+    ));
+    dropdown.add_controller(scroll);
+}
+
+/// When the dropdown popover opens, scroll the list so the active theme is visible.
+fn wire_theme_dropdown_scroll_to_active(dropdown: &DropDown) {
+    let wired = Rc::new(Cell::new(false));
+    let try_wire = clone!(
+        #[strong]
+        dropdown,
+        #[strong]
+        wired,
+        move || {
+            if wired.get() {
+                return;
+            }
+            let Some(list) = find_descendant::<ListView>(&dropdown) else {
+                return;
+            };
+            wired.set(true);
+            list.connect_map(clone!(
+                #[strong]
+                dropdown,
+                move |list| {
+                    let pos = dropdown.selected();
+                    let list = list.clone();
+                    // Wait a frame so the list has a size before scrolling.
+                    glib::idle_add_local_once(move || {
+                        list.scroll_to(
+                            pos,
+                            ListScrollFlags::FOCUS | ListScrollFlags::SELECT,
+                            None,
+                        );
+                    });
+                }
+            ));
+        }
+    );
+
+    try_wire();
+    if !wired.get() {
+        dropdown.connect_realize(clone!(
+            #[strong]
+            try_wire,
+            move |_| try_wire()
+        ));
+        glib::idle_add_local_once(move || try_wire());
+    }
+}
+
+fn find_descendant<T: IsA<Widget>>(root: &impl IsA<Widget>) -> Option<T> {
+    let mut stack = Vec::new();
+    if let Some(child) = root.first_child() {
+        stack.push(child);
+    }
+    while let Some(widget) = stack.pop() {
+        if let Ok(typed) = widget.clone().downcast::<T>() {
+            return Some(typed);
+        }
+        let mut child = widget.first_child();
+        while let Some(c) = child {
+            let next = c.next_sibling();
+            stack.push(c);
+            child = next;
+        }
+    }
+    None
 }

@@ -156,8 +156,17 @@ vte-terminal {
   background-color: alpha(@accent_green, 0.45);
 }
 
-popover.menu,
-popover contents {
+/* Outer popover shell: no border (avoids double frame with contents). */
+popover,
+popover.menu {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+}
+
+popover contents,
+popover.menu contents {
   background-color: @popover_bg;
   color: @fg_primary;
   border: 1px solid @border_subtle;

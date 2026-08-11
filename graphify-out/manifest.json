@@ -1,12 +1,12 @@
 {
   "build.rs": {
-    "mtime": 1785700509.479449,
-    "ast_hash": "dcb0dbd34534debb2d568a2f0fda8033",
+    "mtime": 1786465106.284804,
+    "ast_hash": "e64bbf854fc20d165aa110afb230d268",
     "semantic_hash": ""
   },
   "src/app.rs": {
-    "mtime": 1786034800.436811,
-    "ast_hash": "6b4cca800c29d1c4d7a6dad2e01280c4",
+    "mtime": 1786465325.6997378,
+    "ast_hash": "37943ce428a8f8a2f0e2f1cbe798d3b1",
     "semantic_hash": ""
   },
   "src/context_menu.rs": {
@@ -25,12 +25,12 @@
     "semantic_hash": ""
   },
   "src/terminal_tab.rs": {
-    "mtime": 1786034570.856944,
+    "mtime": 1786457910.9535098,
     "ast_hash": "e12b358825bd1ad85351c0ca7abf0d66",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1786033858.9807901,
+    "mtime": 1786457910.9535098,
     "ast_hash": "80f8e1be3a773498c2d751bfb8996596",
     "semantic_hash": ""
   },
@@ -45,23 +45,23 @@
     "semantic_hash": ""
   },
   "src/ask.rs": {
-    "mtime": 1786033664.6878998,
+    "mtime": 1786457910.9525096,
     "ast_hash": "99025d10e79739e4b35103f2fc0ba081",
     "semantic_hash": ""
   },
   "src/llm.rs": {
-    "mtime": 1786033115.8980107,
+    "mtime": 1786457910.9525096,
     "ast_hash": "c572bedf92fbcaae7400d6818992d3a9",
     "semantic_hash": ""
   },
   "src/settings.rs": {
-    "mtime": 1786034500.2931123,
-    "ast_hash": "9233a4f31f534fc1462b11a58f19efa2",
+    "mtime": 1786465136.3699656,
+    "ast_hash": "aa8f7d26a41e5e2b8386628a7141467b",
     "semantic_hash": ""
   },
   "src/settings_ui.rs": {
-    "mtime": 1786034921.4294727,
-    "ast_hash": "76ace6518955e652a1ee3d195780acd1",
+    "mtime": 1786467230.9489393,
+    "ast_hash": "2f24486f66f1de2973937c999d11a089",
     "semantic_hash": ""
   },
   "src/env_context.rs": {
@@ -132,6 +132,816 @@
   "packaging/test-desktop-integration.sh": {
     "mtime": 1786034195.2459118,
     "ast_hash": "2a062373091af93ab1b9ff04756f85dc",
+    "semantic_hash": ""
+  },
+  "themes/glass-dark.json": {
+    "mtime": 1786467355.1588423,
+    "ast_hash": "85327b38e9970b66d66db7f0175f0ca2",
+    "semantic_hash": ""
+  },
+  "themes/light.json": {
+    "mtime": 1786467355.1635401,
+    "ast_hash": "46f750a18257a6b930153a1bb5bb2a25",
+    "semantic_hash": ""
+  },
+  "themes/nord.json": {
+    "mtime": 1786467355.16393,
+    "ast_hash": "e4c8625252580e3bfa7cdd7278750281",
+    "semantic_hash": ""
+  },
+  "themes/solarized-dark.json": {
+    "mtime": 1786467355.1651547,
+    "ast_hash": "72fa5ab5a275b3996e7592ffd358e911",
+    "semantic_hash": ""
+  },
+  "themes/base16-3024-dark.json": {
+    "mtime": 1786467355.1597838,
+    "ast_hash": "5c37c58dd9c2c0ab7f8989e5db5b98a7",
+    "semantic_hash": ""
+  },
+  "themes/base16-3024-light.json": {
+    "mtime": 1786467355.1655655,
+    "ast_hash": "0dc8d931d84ccd1d93bbe87bd7ecbf56",
+    "semantic_hash": ""
+  },
+  "themes/base16-ashes-dark.json": {
+    "mtime": 1786467355.1599143,
+    "ast_hash": "4245a20ae49519bccf20b8f44dc77d37",
+    "semantic_hash": ""
+  },
+  "themes/base16-ashes-light.json": {
+    "mtime": 1786467355.1625419,
+    "ast_hash": "f577e6dda86b816e2cddeb3dd0b37d5c",
+    "semantic_hash": ""
+  },
+  "themes/base16-atelierdune-dark.json": {
+    "mtime": 1786467355.1637373,
+    "ast_hash": "81887be1d8832649a7486f9f508b8cdb",
+    "semantic_hash": ""
+  },
+  "themes/base16-atelierdune-light.json": {
+    "mtime": 1786467355.166651,
+    "ast_hash": "c4439bfeae0722ee4ddb7059632fd212",
+    "semantic_hash": ""
+  },
+  "themes/base16-atelierforest-dark.json": {
+    "mtime": 1786467355.1605814,
+    "ast_hash": "98b37202675858f714405998d54cd0a6",
+    "semantic_hash": ""
+  },
+  "themes/base16-atelierforest-light.json": {
+    "mtime": 1786467355.1666265,
+    "ast_hash": "704b4a8ffd177ef55b8e5469a241d7d9",
+    "semantic_hash": ""
+  },
+  "themes/base16-atelierheath-dark.json": {
+    "mtime": 1786467355.1664371,
+    "ast_hash": "d3421655342451a3cd556abf8c3f571b",
+    "semantic_hash": ""
+  },
+  "themes/base16-atelierheath-light.json": {
+    "mtime": 1786467355.1664112,
+    "ast_hash": "efa18129f6361ef35f7691b91c135b4c",
+    "semantic_hash": ""
+  },
+  "themes/base16-atelierlakeside-dark.json": {
+    "mtime": 1786467355.1579812,
+    "ast_hash": "0e92759fd6dcd9bb4ec53bc4544d732d",
+    "semantic_hash": ""
+  },
+  "themes/base16-atelierlakeside-light.json": {
+    "mtime": 1786467355.1647675,
+    "ast_hash": "d136cd452d53e3f4eed33e2fb0fe4550",
+    "semantic_hash": ""
+  },
+  "themes/base16-atelierseaside-dark.json": {
+    "mtime": 1786467355.166357,
+    "ast_hash": "cb7273d9c4f0de4adb87935fb163c3be",
+    "semantic_hash": ""
+  },
+  "themes/base16-atelierseaside-light.json": {
+    "mtime": 1786467355.165213,
+    "ast_hash": "bcccf60c2796469d426f8feb128a6f5f",
+    "semantic_hash": ""
+  },
+  "themes/base16-bespin-dark.json": {
+    "mtime": 1786467355.1627326,
+    "ast_hash": "a727c0ef354c32eeb3d97745ffe463bb",
+    "semantic_hash": ""
+  },
+  "themes/base16-bespin-light.json": {
+    "mtime": 1786467355.157751,
+    "ast_hash": "a12cbde1500b24f0d0ddb6a38dbb9490",
+    "semantic_hash": ""
+  },
+  "themes/base16-brewer-dark.json": {
+    "mtime": 1786467355.1603045,
+    "ast_hash": "06e992b644ca8e17e809b3991fffa37d",
+    "semantic_hash": ""
+  },
+  "themes/base16-brewer-light.json": {
+    "mtime": 1786467355.1659157,
+    "ast_hash": "7274cda145cd2b303b9d01016fe9c4a0",
+    "semantic_hash": ""
+  },
+  "themes/base16-chalk-dark.json": {
+    "mtime": 1786467355.1607804,
+    "ast_hash": "7d7175cb005c6ffc448aa87da566f491",
+    "semantic_hash": ""
+  },
+  "themes/base16-chalk-light.json": {
+    "mtime": 1786467355.1622026,
+    "ast_hash": "0c7fcbad8648597fabbdeaf394676cd2",
+    "semantic_hash": ""
+  },
+  "themes/base16-codeschool-dark.json": {
+    "mtime": 1786467355.1596549,
+    "ast_hash": "1d4731aa645fe93bf6ecbd9f09dad52d",
+    "semantic_hash": ""
+  },
+  "themes/base16-codeschool-light.json": {
+    "mtime": 1786467355.1624143,
+    "ast_hash": "a6781e3a9e5b719244c6919a2c34c018",
+    "semantic_hash": ""
+  },
+  "themes/base16-default-dark.json": {
+    "mtime": 1786467355.1606402,
+    "ast_hash": "cf8570d58b6f7a84c39f41c2a473332e",
+    "semantic_hash": ""
+  },
+  "themes/base16-default-light.json": {
+    "mtime": 1786467355.1646278,
+    "ast_hash": "8cb85fe8bfabc734d2e1b94bf67654f4",
+    "semantic_hash": ""
+  },
+  "themes/base16-eighties-dark.json": {
+    "mtime": 1786467355.160704,
+    "ast_hash": "c878338057c4a62711bee7cd267d50d0",
+    "semantic_hash": ""
+  },
+  "themes/base16-eighties-light.json": {
+    "mtime": 1786467355.1657827,
+    "ast_hash": "2f1fcd35a0d52f335e353648d00336fe",
+    "semantic_hash": ""
+  },
+  "themes/base16-embers-dark.json": {
+    "mtime": 1786467355.1591206,
+    "ast_hash": "38350c8a1de04a4871b161d60731978e",
+    "semantic_hash": ""
+  },
+  "themes/base16-embers-light.json": {
+    "mtime": 1786467355.1610405,
+    "ast_hash": "5ea46f6b215fdf63159c8c78eaf06356",
+    "semantic_hash": ""
+  },
+  "themes/base16-google-dark.json": {
+    "mtime": 1786467355.1660595,
+    "ast_hash": "3c81dce301bb81c29768d4d3edffdcd0",
+    "semantic_hash": ""
+  },
+  "themes/base16-google-light.json": {
+    "mtime": 1786467355.1666772,
+    "ast_hash": "0ff67c42415531f1a42648b090cd6974",
+    "semantic_hash": ""
+  },
+  "themes/base16-grayscale-dark.json": {
+    "mtime": 1786467355.164434,
+    "ast_hash": "f134cbb5f2b3dce61f1f503422a99f21",
+    "semantic_hash": ""
+  },
+  "themes/base16-grayscale-light.json": {
+    "mtime": 1786467355.165593,
+    "ast_hash": "8474d23134d62e3cd265ef9ff12f91b8",
+    "semantic_hash": ""
+  },
+  "themes/base16-greenscreen-dark.json": {
+    "mtime": 1786467355.15892,
+    "ast_hash": "3696b77f2bb6325bcd681a9a1c8e1818",
+    "semantic_hash": ""
+  },
+  "themes/base16-greenscreen-light.json": {
+    "mtime": 1786467355.1574647,
+    "ast_hash": "f5a8e4185af26de105e55e90be2a1f19",
+    "semantic_hash": ""
+  },
+  "themes/base16-isotope-dark.json": {
+    "mtime": 1786467355.1601758,
+    "ast_hash": "feafa28600ff06a1fcaa521af327e1f4",
+    "semantic_hash": ""
+  },
+  "themes/base16-isotope-light.json": {
+    "mtime": 1786467355.1618834,
+    "ast_hash": "fe9621e82bc587a60a21a68b28b90ff1",
+    "semantic_hash": ""
+  },
+  "themes/base16-londontube-dark.json": {
+    "mtime": 1786467355.1653805,
+    "ast_hash": "7373e78f508c7008f20ace85c5144675",
+    "semantic_hash": ""
+  },
+  "themes/base16-londontube-light.json": {
+    "mtime": 1786467355.1658099,
+    "ast_hash": "b1375f4bd6163c3959172f66f7ce37c0",
+    "semantic_hash": ""
+  },
+  "themes/base16-marrakesh-dark.json": {
+    "mtime": 1786467355.15939,
+    "ast_hash": "f983c84b76fa689944b0a1ec145763ac",
+    "semantic_hash": ""
+  },
+  "themes/base16-marrakesh-light.json": {
+    "mtime": 1786467355.158422,
+    "ast_hash": "6bee137e1b5d1ffbc8c6b466940e1dfd",
+    "semantic_hash": ""
+  },
+  "themes/base16-mocha-dark.json": {
+    "mtime": 1786467355.1575818,
+    "ast_hash": "8a61cdfbb660e12d385097f3b0c538ab",
+    "semantic_hash": ""
+  },
+  "themes/base16-mocha-light.json": {
+    "mtime": 1786467355.158765,
+    "ast_hash": "cdcbcc2414d068a0d9fbe012658d9fa9",
+    "semantic_hash": ""
+  },
+  "themes/base16-monokai-dark.json": {
+    "mtime": 1786467355.1654983,
+    "ast_hash": "f60dbad699360475e61dadb70aa5baf4",
+    "semantic_hash": ""
+  },
+  "themes/base16-monokai-light.json": {
+    "mtime": 1786467355.1626048,
+    "ast_hash": "dc5617c5d3e62ca1eb4c2848f66ba842",
+    "semantic_hash": ""
+  },
+  "themes/base16-ocean-dark.json": {
+    "mtime": 1786467355.1649623,
+    "ast_hash": "1c27e1fb22b32b778d901013a80e075f",
+    "semantic_hash": ""
+  },
+  "themes/base16-ocean-light.json": {
+    "mtime": 1786467355.1619473,
+    "ast_hash": "a1e5944ef4ff7d37a9d03b43a1f8694a",
+    "semantic_hash": ""
+  },
+  "themes/base16-paraiso-dark.json": {
+    "mtime": 1786467355.161105,
+    "ast_hash": "afe511b7d905ba12c9712467bde45839",
+    "semantic_hash": ""
+  },
+  "themes/base16-paraiso-light.json": {
+    "mtime": 1786467355.1627965,
+    "ast_hash": "47f7d07272563e5a5497156576ba6069",
+    "semantic_hash": ""
+  },
+  "themes/base16-railscasts-dark.json": {
+    "mtime": 1786467355.161754,
+    "ast_hash": "95a730613569248cd35638694e9760a3",
+    "semantic_hash": ""
+  },
+  "themes/base16-railscasts-light.json": {
+    "mtime": 1786467355.166085,
+    "ast_hash": "f46da05327c8114a40333e9d529ee8de",
+    "semantic_hash": ""
+  },
+  "themes/base16-shapeshifter-dark.json": {
+    "mtime": 1786467355.1585622,
+    "ast_hash": "9d07b2b57008c4885d6f1b003feed265",
+    "semantic_hash": ""
+  },
+  "themes/base16-shapeshifter-light.json": {
+    "mtime": 1786467355.1608455,
+    "ast_hash": "f573404e65fbd747996d45f9689c7cbe",
+    "semantic_hash": ""
+  },
+  "themes/base16-solarized-dark.json": {
+    "mtime": 1786467355.1663854,
+    "ast_hash": "cb03e8bd7ab04f1c8778c60171864a16",
+    "semantic_hash": ""
+  },
+  "themes/base16-solarized-light.json": {
+    "mtime": 1786467355.1645632,
+    "ast_hash": "0cb30216b7ab4152d4178194ad42b865",
+    "semantic_hash": ""
+  },
+  "themes/base16-tomorrow-dark.json": {
+    "mtime": 1786467355.1648264,
+    "ast_hash": "2eb82d5835b071f1ed258ca9217e87cc",
+    "semantic_hash": ""
+  },
+  "themes/base16-tomorrow-light.json": {
+    "mtime": 1786467355.1630485,
+    "ast_hash": "77e17ae64f432d38fe42823a558381fc",
+    "semantic_hash": ""
+  },
+  "themes/base16-twilight-dark.json": {
+    "mtime": 1786467355.162922,
+    "ast_hash": "c756d330bea6c9f0ac05be7b3439899f",
+    "semantic_hash": ""
+  },
+  "themes/base16-twilight-light.json": {
+    "mtime": 1786467355.1623392,
+    "ast_hash": "61dfd5655bdb8f09c004aef98cd82128",
+    "semantic_hash": ""
+  },
+  "themes/collection-dawn.json": {
+    "mtime": 1786467355.1591883,
+    "ast_hash": "4f192afc6cbc39c731b0b0b84647f32d",
+    "semantic_hash": ""
+  },
+  "themes/collection-gotham.json": {
+    "mtime": 1786467355.1579046,
+    "ast_hash": "ca48dc706771f7081826343359dbf007",
+    "semantic_hash": ""
+  },
+  "themes/collection-hund.json": {
+    "mtime": 1786467355.1620743,
+    "ast_hash": "8041e14e4fbaffbc3e06b13936735ed5",
+    "semantic_hash": ""
+  },
+  "themes/collection-hybrid.json": {
+    "mtime": 1786467355.1594567,
+    "ast_hash": "117f35f5902e06e41a3f02c221dba121",
+    "semantic_hash": ""
+  },
+  "themes/collection-invisibone.json": {
+    "mtime": 1786467355.1659436,
+    "ast_hash": "fab0fe198848d9e3ce527bb9e08bff52",
+    "semantic_hash": ""
+  },
+  "themes/collection-jmbi.json": {
+    "mtime": 1786467355.1663027,
+    "ast_hash": "2164f9087336ec4eb6c011def2a1af88",
+    "semantic_hash": ""
+  },
+  "themes/collection-kasugano.json": {
+    "mtime": 1786467355.1609766,
+    "ast_hash": "3ccce51eb512fb22e1b00b8690717126",
+    "semantic_hash": ""
+  },
+  "themes/collection-monokai.json": {
+    "mtime": 1786467355.1601105,
+    "ast_hash": "b0ad13177b7d3866908c39d899c84ce8",
+    "semantic_hash": ""
+  },
+  "themes/collection-mostly-bright.json": {
+    "mtime": 1786467355.1666012,
+    "ast_hash": "44e027065161fde0b96ad04f8729b553",
+    "semantic_hash": ""
+  },
+  "themes/collection-navy-and-ivory.json": {
+    "mtime": 1786467355.1604395,
+    "ast_hash": "0446ccbb268b06c7b23dad12f2da02bb",
+    "semantic_hash": ""
+  },
+  "themes/collection-pretty-and-pastel.json": {
+    "mtime": 1786467355.1636086,
+    "ast_hash": "c53a66dd48c3b8e5cf1e8c9d23c87399",
+    "semantic_hash": ""
+  },
+  "themes/collection-s3r0-modified.json": {
+    "mtime": 1786467355.1622653,
+    "ast_hash": "f3b5d0e2e5d9e55af4753d09a4e5b2be",
+    "semantic_hash": ""
+  },
+  "themes/collection-sweetlove.json": {
+    "mtime": 1786467355.1662772,
+    "ast_hash": "b4a65fef44eea11514cdba3766b6c672",
+    "semantic_hash": ""
+  },
+  "themes/collection-trim-yer-beard.json": {
+    "mtime": 1786467355.161431,
+    "ast_hash": "72ef83d2f8ee9011c00f44f031bc9159",
+    "semantic_hash": ""
+  },
+  "themes/collection-vacuous2.json": {
+    "mtime": 1786467355.1612973,
+    "ast_hash": "9e02f77c9d0a75c4438dfe4253d01edd",
+    "semantic_hash": ""
+  },
+  "themes/collection-visibone-alt-2.json": {
+    "mtime": 1786467355.1628592,
+    "ast_hash": "5b65dbc0c6dd7865a587f5d9f18e77ab",
+    "semantic_hash": ""
+  },
+  "themes/collection-x-dotshare.json": {
+    "mtime": 1786467355.1582026,
+    "ast_hash": "a71203cfb98e7cf4b8fa927e77c1a359",
+    "semantic_hash": ""
+  },
+  "themes/collection-x-erosion.json": {
+    "mtime": 1786467355.16589,
+    "ast_hash": "f195973d038abc74273361c2820f318c",
+    "semantic_hash": ""
+  },
+  "themes/collection-yousai.json": {
+    "mtime": 1786467355.1657555,
+    "ast_hash": "b9595abcb6caa9a94d1ab73f93a94410",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-astromouse.json": {
+    "mtime": 1786467355.1648908,
+    "ast_hash": "b0b95cf0282008242321e6605267ea80",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-baskerville-count-von-count.json": {
+    "mtime": 1786467355.1657023,
+    "ast_hash": "efadc6c408f1219c478aa5bad0f13c81",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-baskerville-eldorado-dark.json": {
+    "mtime": 1786467355.1583495,
+    "ast_hash": "8e47f931ff8ff2bcc566511a5f5ad8c3",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-baskerville-farside.json": {
+    "mtime": 1786467355.1664906,
+    "ast_hash": "761d480b756a87f72a69a62a3e55e9c8",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-baskerville-ivory-dark.json": {
+    "mtime": 1786467355.1667037,
+    "ast_hash": "066c8ae780292aa8f5c7efc595df3a4f",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-baskerville-ivorylight.json": {
+    "mtime": 1786467355.1665452,
+    "ast_hash": "ccd589fadcfa204c5a0163323e8eb86d",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-baskerville-lost-woods.json": {
+    "mtime": 1786467355.1581326,
+    "ast_hash": "1db8bf09aee0d3efdf6e1e7e5402038a",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-belge.json": {
+    "mtime": 1786467355.164499,
+    "ast_hash": "8bb91001ee5534ced7eddf7b6f96a2f9",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-bitmute.json": {
+    "mtime": 1786467355.1662505,
+    "ast_hash": "4bacf9378861f44c0f99d081dd44be45",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-bleh-1.json": {
+    "mtime": 1786467355.1652863,
+    "ast_hash": "e38256fadfc3882c87cc026b0fac7114",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-cloud.json": {
+    "mtime": 1786467355.1656497,
+    "ast_hash": "50a95fdd9c2bd00eb326f83b9a17e485",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-colorfulcolors.json": {
+    "mtime": 1786467355.1632676,
+    "ast_hash": "9428701eadde98bdf33346cd884df040",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-deafened.json": {
+    "mtime": 1786467355.1638649,
+    "ast_hash": "323db66984ad072fd80c9800cf06bfe2",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-derp.json": {
+    "mtime": 1786467355.1643662,
+    "ast_hash": "5f4619f6500f365729e79893f441a065",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-digerati.json": {
+    "mtime": 1786467355.1621382,
+    "ast_hash": "5b04eed514f913e74b05f923f24ad6b1",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-dkeg-canvasedpastel.json": {
+    "mtime": 1786467355.161625,
+    "ast_hash": "3c4419458a6f7feb9c2804a1034b085d",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-dkeg-catchmeifyoucan.json": {
+    "mtime": 1786467355.1661968,
+    "ast_hash": "6974861721ed480ad39b78673978027c",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-dkeg-citystreets.json": {
+    "mtime": 1786467355.1636722,
+    "ast_hash": "0a96d47997121d608d3c7d59faee1584",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-dkeg-colorstar.json": {
+    "mtime": 1786467355.159719,
+    "ast_hash": "aa5765b6e9960b0331844f4332d42d5f",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-dkeg-panels.json": {
+    "mtime": 1786467355.166573,
+    "ast_hash": "a7c874f0ba3879493846769eb6b3d202",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-dkeg-redphoenix.json": {
+    "mtime": 1786467355.1634724,
+    "ast_hash": "c7fa9a8851986b9309f3849615787bda",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-dkeg-teva.json": {
+    "mtime": 1786467355.1629848,
+    "ast_hash": "52e664f65bf1d801167d08f4fd50155a",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-dkeg-unsiftedwheat.json": {
+    "mtime": 1786467355.1654606,
+    "ast_hash": "989fc528144d8088e8e0b6c6a293e070",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-dkeg-vwbug.json": {
+    "mtime": 1786467355.1589863,
+    "ast_hash": "f9098fd98a8cbe2e7eabc5b6f904178b",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-doomicide-darkocean.json": {
+    "mtime": 1786467355.1650827,
+    "ast_hash": "f399d8bd7c3ac45661b94e62b21636ff",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-dotshare.json": {
+    "mtime": 1786467355.1616893,
+    "ast_hash": "4e2fd5871a9cefa97d08a0e3f594ffb0",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-dwmrob.json": {
+    "mtime": 1786467355.1661441,
+    "ast_hash": "6390b9a8c4e0504b68f308ac58ff6ed3",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-epiphany.json": {
+    "mtime": 1786467355.1624784,
+    "ast_hash": "9125c66a0de40b0a2c039690e95f035c",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-eqie6.json": {
+    "mtime": 1786467355.1582716,
+    "ast_hash": "ce1798c654632e4833c8df6a382ca188",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-erebus.json": {
+    "mtime": 1786467355.1580594,
+    "ast_hash": "a13d50421c717b195ea1b3c0213d9ea8",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-euphrasia.json": {
+    "mtime": 1786467355.1605053,
+    "ast_hash": "134089ec5556ea0013e39b15be4591e0",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-fishbone.json": {
+    "mtime": 1786467355.161366,
+    "ast_hash": "583a8d80f2931f0ee9473795d692fe16",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-gjm.json": {
+    "mtime": 1786467355.1664631,
+    "ast_hash": "af6447a4d79a25fe9ca9cc5410fce134",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-gnometerm.json": {
+    "mtime": 1786467355.1602407,
+    "ast_hash": "e6da0f37ede6d7c2b355c2cb04776e2a",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-grandshell.json": {
+    "mtime": 1786467355.16562,
+    "ast_hash": "6df0901efac0b15291c916de7240c4d6",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-gslob-nature-suede.json": {
+    "mtime": 1786467355.1600466,
+    "ast_hash": "1c44090e6f6be208437ca68dd6f0bd01",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-gutterslob-aikofog.json": {
+    "mtime": 1786467355.159981,
+    "ast_hash": "a66e7891fd29202ebb6d2b9e5975ed17",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-gutterslob-lightwhite.json": {
+    "mtime": 1786467355.1576698,
+    "ast_hash": "8d1b0236ab2cbf6456dc3842bf029fa8",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-gutterslob-lumifoo.json": {
+    "mtime": 1786467355.165863,
+    "ast_hash": "cdb49ba9710c55aa1c1f805038f232a1",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-hybrid.json": {
+    "mtime": 1786467355.1592536,
+    "ast_hash": "9517381d1dbf62c0807bf71b43243915",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-iiamblack.json": {
+    "mtime": 1786467355.1657295,
+    "ast_hash": "36471ae6f2447c2347e1baff4410f00e",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-insignificato.json": {
+    "mtime": 1786467355.159055,
+    "ast_hash": "b1b09eb5c294a166e4c687f2182e1b63",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-jasonwryan.json": {
+    "mtime": 1786467355.165019,
+    "ast_hash": "28ed1aa5cdb51328050ababe2be78a6c",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-jwr-dark.json": {
+    "mtime": 1786467355.166169,
+    "ast_hash": "68fba3c3736ec1850374080df98653f6",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-material.json": {
+    "mtime": 1786467355.1595898,
+    "ast_hash": "09dd7748bb9b3dd0a21bb00981c82dbc",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-mikado.json": {
+    "mtime": 1786467355.1611683,
+    "ast_hash": "a279e4e8b2bc6db2dfe4c96d254dffcf",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-mikazuki.json": {
+    "mtime": 1786467355.1642914,
+    "ast_hash": "9b8aa63d41bbcac78daa471b8efb58bc",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-monotheme.json": {
+    "mtime": 1786467355.1656756,
+    "ast_hash": "86ddd64aed6a3ce54fffaf84fa1a26ac",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-muse.json": {
+    "mtime": 1786467355.1609113,
+    "ast_hash": "90ed71f01749a07e76645809a6a48e79",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-muzieca-lowcontrast.json": {
+    "mtime": 1786467355.1620104,
+    "ast_hash": "b9bb0cf20627d57ca737a48037b128c1",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-muzieca-mono.json": {
+    "mtime": 1786467355.1659796,
+    "ast_hash": "6003aab332c731f0887f95f4c041fea7",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-muzieca-pastel-white.json": {
+    "mtime": 1786467355.1593196,
+    "ast_hash": "8e548f1da993d9dc749dc4f86bf79000",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-nancy.json": {
+    "mtime": 1786467355.1603746,
+    "ast_hash": "fe8ce3dcfc10d70152a7d59a549fa40f",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-neon.json": {
+    "mtime": 1786467355.1646924,
+    "ast_hash": "d02d8917255c5bc555a8e298a101ff01",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-nucolors.json": {
+    "mtime": 1786467355.1586301,
+    "ast_hash": "3236f72b3882ecb2dfbb23742fe2e859",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-nudge.json": {
+    "mtime": 1786467355.165837,
+    "ast_hash": "664799d688a7f60e4c4efef8b777889e",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-numixdarkest.json": {
+    "mtime": 1786467355.1663277,
+    "ast_hash": "c850e13fd0ac34f319181e822abb4e6c",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-ok100-matrix.json": {
+    "mtime": 1786467355.1631114,
+    "ast_hash": "84373d3ab1ef10c536f290ebc93852ec",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-orangish.json": {
+    "mtime": 1786467355.1615603,
+    "ast_hash": "729dd755432fd35b144b3f21c61f6651",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-parker-brothers.json": {
+    "mtime": 1786467355.1667314,
+    "ast_hash": "027b6a6350a032aa8c6efb53d8288b0f",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-phrak1.json": {
+    "mtime": 1786467355.1662238,
+    "ast_hash": "94607eb22d3df2bc77a48389a7694a1c",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-pulp.json": {
+    "mtime": 1786467355.1633317,
+    "ast_hash": "236c94cc7a383f741d18412e32f03014",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-rasi.json": {
+    "mtime": 1786467355.1631746,
+    "ast_hash": "9db2baff457a9077e019d03657f06d29",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-rezza.json": {
+    "mtime": 1786467355.1638002,
+    "ast_hash": "5dd3928ff3ca21445f062aee0f2d9dfe",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-rooster-sos.json": {
+    "mtime": 1786467355.1660073,
+    "ast_hash": "6585da00f4f840f14c6ebc4d0454c9fa",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-rydgel.json": {
+    "mtime": 1786467355.1584923,
+    "ast_hash": "bdae3dc622917d977919de5d47d68b28",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-sexcolors.json": {
+    "mtime": 1786467355.1667614,
+    "ast_hash": "4219ba1c0ce84c0abb6a5a36919c7690",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-shic.json": {
+    "mtime": 1786467355.1661172,
+    "ast_hash": "c2d4488e2622745e7757542e55d641bc",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-simple-rainbow.json": {
+    "mtime": 1786467355.1626687,
+    "ast_hash": "ca0091d1e8df3241b3a9121520cca06e",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-splurge.json": {
+    "mtime": 1786467355.1665177,
+    "ast_hash": "74af1967f00689d503b56bafa7be45c6",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-swayr.json": {
+    "mtime": 1786467355.1618183,
+    "ast_hash": "5818b282593537d96dbd45a9e140e5d9",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-tango.json": {
+    "mtime": 1786467355.1660342,
+    "ast_hash": "0ffd2eb57aed731387eae80eb7ba3b52",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-tangoesque.json": {
+    "mtime": 1786467355.1655357,
+    "ast_hash": "a1b9bd50d6ee78fe73b54d6b20ba0884",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-tartan.json": {
+    "mtime": 1786467355.1578295,
+    "ast_hash": "cb533a3453aef4bb43e53e322b4f434d",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-theme2.json": {
+    "mtime": 1786467355.1642237,
+    "ast_hash": "b6527d8327ec25f6c9fcd6ce30d4e3f1",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-thwump.json": {
+    "mtime": 1786467355.158697,
+    "ast_hash": "628a5e936bbbae3217653907783ad9f7",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-tlh.json": {
+    "mtime": 1786467355.1598487,
+    "ast_hash": "c0a84440f000e2dcf8b3d0515fa8e17b",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-user-77-mashup-colors.json": {
+    "mtime": 1786467355.1641498,
+    "ast_hash": "fcc873e2754bb26077590ece703c56e6",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-visiblue.json": {
+    "mtime": 1786467355.1614945,
+    "ast_hash": "b6fbac8e1236e02744fc850adc2dac62",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-visibone.json": {
+    "mtime": 1786467355.1612325,
+    "ast_hash": "17efb4a92c01b9fe862012b94e50940c",
+    "semantic_hash": ""
+  },
+  "themes/xcolors-net-zenburn.json": {
+    "mtime": 1786467355.159523,
+    "ast_hash": "a368b6ea42d7c426f5dfeb6787b8df71",
     "semantic_hash": ""
   }
 }

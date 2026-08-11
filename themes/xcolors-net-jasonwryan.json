@@ -1,0 +1,59 @@
+{
+  "id": "xcolors-net-jasonwryan",
+  "label": "Jason Wryan",
+  "window_radius": 12.0,
+  "window_border": [
+    1.0,
+    1.0,
+    1.0,
+    0.22
+  ],
+  "chrome_fill": [
+    0.0,
+    0.0,
+    0.0,
+    0.93
+  ],
+  "tab_radius": 8.0,
+  "tab_border": "transparent",
+  "tab_border_active": "#7c9aa6",
+  "bg_glass": "alpha(#000000, 0.55)",
+  "bg_tab": "alpha(#222222, 0.55)",
+  "fg_primary": "#ffffff",
+  "fg_muted": "#454545",
+  "accent_green": "#6c7e55",
+  "accent_blue": "#4c8ea1",
+  "accent_purple": "#956d9d",
+  "border_subtle": "alpha(#ffffff, 0.12)",
+  "popover_bg": "alpha(#222222, 0.94)",
+  "settings_bg": "alpha(#222222, 0.96)",
+  "ask_panel_bg": "alpha(#000000, 0.94)",
+  "ask_prompt_bg": "alpha(#000000, 0.55)",
+  "danger": "#9e5641",
+  "warning": "#caaf2b",
+  "terminal_fg": "#ffffff",
+  "terminal_bg": [
+    0.0,
+    0.0,
+    0.0,
+    0.55
+  ],
+  "palette": [
+    "#222222",
+    "#9e5641",
+    "#6c7e55",
+    "#caaf2b",
+    "#4c8ea1",
+    "#956d9d",
+    "#7c9aa6",
+    "#909090",
+    "#454545",
+    "#cc896d",
+    "#7db37d",
+    "#bfb556",
+    "#6bc1d0",
+    "#c18fcb",
+    "#8fadbf",
+    "#ffffff"
+  ]
+}

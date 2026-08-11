@@ -1,0 +1,59 @@
+{
+  "id": "collection-yousai",
+  "label": "Yousai",
+  "window_radius": 12.0,
+  "window_border": [
+    0.204,
+    0.188,
+    0.176,
+    0.18
+  ],
+  "chrome_fill": [
+    0.961,
+    0.906,
+    0.871,
+    0.95
+  ],
+  "tab_radius": 8.0,
+  "tab_border": "transparent",
+  "tab_border_active": "#d97742",
+  "bg_glass": "alpha(#f5e7de, 0.85)",
+  "bg_tab": "alpha(#4c4742, 0.75)",
+  "fg_primary": "#34302d",
+  "fg_muted": "#34302d",
+  "accent_green": "#4c3226",
+  "accent_blue": "#4c7399",
+  "accent_purple": "#bf9986",
+  "border_subtle": "alpha(#34302d, 0.12)",
+  "popover_bg": "alpha(#4c4742, 0.96)",
+  "settings_bg": "alpha(#4c4742, 0.98)",
+  "ask_panel_bg": "alpha(#f5e7de, 0.96)",
+  "ask_prompt_bg": "alpha(#f5e7de, 0.7)",
+  "danger": "#992e2e",
+  "warning": "#a67c53",
+  "terminal_fg": "#34302d",
+  "terminal_bg": [
+    0.961,
+    0.906,
+    0.871,
+    0.85
+  ],
+  "palette": [
+    "#666661",
+    "#992e2e",
+    "#4c3226",
+    "#a67c53",
+    "#4c7399",
+    "#bf9986",
+    "#d97742",
+    "#34302d",
+    "#7f7f7a",
+    "#b23636",
+    "#664233",
+    "#bf8f60",
+    "#5986b2",
+    "#d9ae98",
+    "#f2854a",
+    "#4c4742"
+  ]
+}

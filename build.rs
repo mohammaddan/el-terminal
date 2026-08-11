@@ -1,12 +1,13 @@
+use std::env;
+use std::path::Path;
+
 fn main() {
-    let manifest_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
-    let local_pc = format!(
-        "{manifest_dir}/.local-deps/usr/lib/x86_64-linux-gnu/pkgconfig"
-    );
+    let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
+    let local_pc = format!("{manifest_dir}/.local-deps/usr/lib/x86_64-linux-gnu/pkgconfig");
     let local_lib = format!("{manifest_dir}/.local-deps/usr/lib/x86_64-linux-gnu");
 
-    if std::path::Path::new(&local_pc).exists() {
-        let existing = std::env::var("PKG_CONFIG_PATH").unwrap_or_default();
+    if Path::new(&local_pc).exists() {
+        let existing = env::var("PKG_CONFIG_PATH").unwrap_or_default();
         let path = if existing.is_empty() {
             local_pc.clone()
         } else {
@@ -14,7 +15,7 @@ fn main() {
         };
         // SAFETY: build script runs single-threaded before rustc
         unsafe {
-            std::env::set_var("PKG_CONFIG_PATH", &path);
+            env::set_var("PKG_CONFIG_PATH", &path);
         }
         println!("cargo:rustc-link-search=native={local_lib}");
         println!("cargo:rustc-link-arg=-Wl,-rpath,{local_lib}");
