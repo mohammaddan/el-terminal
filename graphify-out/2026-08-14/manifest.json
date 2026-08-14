@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "src/app.rs": {
-    "mtime": 1786725590.84356,
-    "ast_hash": "49156aee26e64f5ce7c8af7c04a37666",
+    "mtime": 1786465325.6997378,
+    "ast_hash": "37943ce428a8f8a2f0e2f1cbe798d3b1",
     "semantic_hash": ""
   },
   "src/context_menu.rs": {
@@ -25,13 +25,13 @@
     "semantic_hash": ""
   },
   "src/terminal_tab.rs": {
-    "mtime": 1786723971.1143568,
-    "ast_hash": "a93b3df268a56eabf730115abc60f02a",
+    "mtime": 1786457910.9535098,
+    "ast_hash": "e12b358825bd1ad85351c0ca7abf0d66",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1786725449.518044,
-    "ast_hash": "16f241845f4ae80dce556118acb362f8",
+    "mtime": 1786457910.9535098,
+    "ast_hash": "80f8e1be3a773498c2d751bfb8996596",
     "semantic_hash": ""
   },
   "src/chrome.rs": {
@@ -45,22 +45,22 @@
     "semantic_hash": ""
   },
   "src/ask.rs": {
-    "mtime": 1786718715.4606068,
+    "mtime": 1786457910.9525096,
     "ast_hash": "99025d10e79739e4b35103f2fc0ba081",
     "semantic_hash": ""
   },
   "src/llm.rs": {
-    "mtime": 1786718715.4606068,
+    "mtime": 1786457910.9525096,
     "ast_hash": "c572bedf92fbcaae7400d6818992d3a9",
     "semantic_hash": ""
   },
   "src/settings.rs": {
-    "mtime": 1786718715.4696074,
+    "mtime": 1786465136.3699656,
     "ast_hash": "aa8f7d26a41e5e2b8386628a7141467b",
     "semantic_hash": ""
   },
   "src/settings_ui.rs": {
-    "mtime": 1786718715.461607,
+    "mtime": 1786467230.9489393,
     "ast_hash": "2f24486f66f1de2973937c999d11a089",
     "semantic_hash": ""
   },

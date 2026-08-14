@@ -12,8 +12,9 @@ use gtk4::glib::{self, clone};
 use gtk4::prelude::*;
 use gtk4::{
     Application, ApplicationWindow, Box as GtkBox, CssProvider, EventControllerKey,
-    EventControllerScroll, EventControllerScrollFlags, GestureClick, Orientation, Overlay, Paned,
-    Stack, StackTransitionType, Widget, STYLE_PROVIDER_PRIORITY_APPLICATION,
+    EventControllerMotion, EventControllerScroll, EventControllerScrollFlags, EventSequenceState,
+    GestureClick, Orientation, Overlay, Paned, PropagationPhase, Stack, StackTransitionType,
+    Widget, STYLE_PROVIDER_PRIORITY_APPLICATION,
 };
 use std::cell::{Cell, RefCell};
 use std::env;
@@ -198,6 +199,7 @@ pub fn build_ui(app: &Application) {
     );
 
     install_drag(&top_bar, &state.window);
+    install_resize(&overlay, &state.window);
     install_menu(&menu_btn, &state);
     install_window_controls(
         &state.window,
@@ -225,6 +227,115 @@ fn apply_working_directory(dir: &str) {
     let path = Path::new(dir);
     if let Err(err) = env::set_current_dir(path) {
         eprintln!("el-terminal: failed to set working directory to {dir}: {err}");
+    }
+}
+
+const RESIZE_MARGIN: f64 = 8.0;
+
+fn install_resize(overlay: &Overlay, window: &ApplicationWindow) {
+    let motion = EventControllerMotion::new();
+    motion.set_propagation_phase(PropagationPhase::Capture);
+    motion.connect_motion(clone!(
+        #[weak]
+        overlay,
+        #[weak]
+        window,
+        move |_, x, y| {
+            let cursor = if window.is_maximized() {
+                None
+            } else {
+                resize_edge_at(&overlay, x, y).map(resize_cursor_name)
+            };
+            overlay.set_cursor_from_name(cursor);
+        }
+    ));
+    motion.connect_leave(clone!(
+        #[weak]
+        overlay,
+        move |_| {
+            overlay.set_cursor_from_name(None);
+        }
+    ));
+    overlay.add_controller(motion);
+
+    let gesture = GestureClick::new();
+    gesture.set_button(1);
+    gesture.set_propagation_phase(PropagationPhase::Capture);
+    gesture.connect_pressed(clone!(
+        #[weak]
+        overlay,
+        #[weak]
+        window,
+        move |gesture, n_press, x, y| {
+            if n_press != 1 || window.is_maximized() {
+                return;
+            }
+            let Some(edge) = resize_edge_at(&overlay, x, y) else {
+                return;
+            };
+            let Some(event) = gesture.current_event() else {
+                return;
+            };
+            let Some(device) = event.device() else {
+                return;
+            };
+            let Some(native) = window.native() else {
+                return;
+            };
+            let Some(surface) = native.surface() else {
+                return;
+            };
+            let Ok(toplevel) = surface.downcast::<gdk::Toplevel>() else {
+                return;
+            };
+            let (sx, sy) = overlay
+                .compute_point(&window, &gtk4::graphene::Point::new(x as f32, y as f32))
+                .map(|p| (f64::from(p.x()), f64::from(p.y())))
+                .unwrap_or((x, y));
+            toplevel.begin_resize(edge, Some(&device), 1, sx, sy, event.time());
+            gesture.set_state(EventSequenceState::Claimed);
+        }
+    ));
+    overlay.add_controller(gesture);
+}
+
+fn resize_edge_at(overlay: &Overlay, x: f64, y: f64) -> Option<gdk::SurfaceEdge> {
+    if hit_interactive_child(overlay, x, y) {
+        return None;
+    }
+    let width = f64::from(overlay.width());
+    let height = f64::from(overlay.height());
+    if width < RESIZE_MARGIN * 2.0 || height < RESIZE_MARGIN * 2.0 {
+        return None;
+    }
+    let left = x <= RESIZE_MARGIN;
+    let right = x >= width - RESIZE_MARGIN;
+    let top = y <= RESIZE_MARGIN;
+    let bottom = y >= height - RESIZE_MARGIN;
+    match (top, bottom, left, right) {
+        (true, false, true, false) => Some(gdk::SurfaceEdge::NorthWest),
+        (true, false, false, true) => Some(gdk::SurfaceEdge::NorthEast),
+        (false, true, true, false) => Some(gdk::SurfaceEdge::SouthWest),
+        (false, true, false, true) => Some(gdk::SurfaceEdge::SouthEast),
+        (true, false, false, false) => Some(gdk::SurfaceEdge::North),
+        (false, true, false, false) => Some(gdk::SurfaceEdge::South),
+        (false, false, true, false) => Some(gdk::SurfaceEdge::West),
+        (false, false, false, true) => Some(gdk::SurfaceEdge::East),
+        _ => None,
+    }
+}
+
+fn resize_cursor_name(edge: gdk::SurfaceEdge) -> &'static str {
+    match edge {
+        gdk::SurfaceEdge::NorthWest => "nw-resize",
+        gdk::SurfaceEdge::North => "n-resize",
+        gdk::SurfaceEdge::NorthEast => "ne-resize",
+        gdk::SurfaceEdge::West => "w-resize",
+        gdk::SurfaceEdge::East => "e-resize",
+        gdk::SurfaceEdge::SouthWest => "sw-resize",
+        gdk::SurfaceEdge::South => "s-resize",
+        gdk::SurfaceEdge::SouthEast => "se-resize",
+        _ => "default",
     }
 }
 

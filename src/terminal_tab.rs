@@ -27,6 +27,7 @@ pub fn create_terminal_with(settings: &AppSettings, spawn: SpawnOpts) -> Termina
     let terminal = Terminal::new();
     terminal.set_hexpand(true);
     terminal.set_vexpand(true);
+    terminal.set_size_request(0, 0);
     terminal.set_scrollback_lines(10_000);
     terminal.set_mouse_autohide(true);
     terminal.set_allow_hyperlink(true);

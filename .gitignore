@@ -2,3 +2,4 @@
 /.local-deps
 **/*.rs.bk
 .DS_Store
+git-commit.md

@@ -40,6 +40,13 @@ window.terminal-window {
   background-color: transparent;
   background-image: none;
   padding: 4px 10px 10px 10px;
+  min-width: 0;
+  min-height: 0;
+}
+
+vte-terminal {
+  min-width: 0;
+  min-height: 0;
 }
 
 .tab-pill {

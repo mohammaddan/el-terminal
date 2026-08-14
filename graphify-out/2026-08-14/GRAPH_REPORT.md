@@ -1,16 +1,16 @@
-# Graph Report - terminal-emulator  (2026-08-14)
+# Graph Report - terminal-emulator  (2026-08-11)
 
 ## Corpus Check
-- 183 files · ~98,421 words
+- 183 files · ~98,044 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 349 nodes · 741 edges · 21 communities (17 shown, 4 thin omitted)
+- 344 nodes · 730 edges · 21 communities (17 shown, 4 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `53ac91d7`
+- Built from commit: `9b6843cb`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -41,7 +41,7 @@
 2. `AppSettings` - 24 edges
 3. `AskPanel` - 20 edges
 4. `parse_reply()` - 13 edges
-5. `build_ui()` - 12 edges
+5. `build_ui()` - 11 edges
 6. `ThemeStyle` - 11 edges
 7. `open_settings_dialog()` - 11 edges
 8. `TerminalContext` - 10 edges
@@ -86,8 +86,8 @@ Cohesion: 0.14
 Nodes (13): Ask AI setup, Build & run, CLI, Default terminal, Dependencies, Desktop integration (Ubuntu 24.04), El-Terminal, Features (+5 more)
 
 ### Community 5 - "Tab"
-Cohesion: 0.09
-Nodes (54): Application, Cell, CssProvider, Orientation, Overlay, Paned, active_terminal(), add_tab() (+46 more)
+Cohesion: 0.11
+Nodes (49): Application, Cell, CssProvider, Orientation, Paned, active_terminal(), add_tab(), adjust_font_size() (+41 more)
 
 ### Community 6 - "build_ui"
 Cohesion: 0.16
@@ -138,11 +138,11 @@ Nodes (24): AppSettings, bundled_themes_dirs(), default_ask_prefix(), default_th
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `AppSettings` connect `AppSettings` to `terminal_tab.rs`, `Rc`, `Tab`, `build_ui`, `open_settings_dialog`?**
-  _High betweenness centrality (0.159) - this node is a cross-community bridge._
+  _High betweenness centrality (0.162) - this node is a cross-community bridge._
 - **Why does `TerminalContext` connect `env_context.rs` to `Rc`, `build_ui`?**
-  _High betweenness centrality (0.101) - this node is a cross-community bridge._
+  _High betweenness centrality (0.102) - this node is a cross-community bridge._
 - **Why does `AppState` connect `Tab` to `app.rs`, `Rc`, `AppSettings`?**
-  _High betweenness centrality (0.098) - this node is a cross-community bridge._
+  _High betweenness centrality (0.099) - this node is a cross-community bridge._
 - **What connects `Features`, `Shortcuts`, `Dependencies` to the rest of the system?**
   _11 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Rc` be split into smaller, more focused modules?**
@@ -150,4 +150,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `Terminal Emulator` be split into smaller, more focused modules?**
   _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._
 - **Should `Tab` be split into smaller, more focused modules?**
-  _Cohesion score 0.09427609427609428 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.10530612244897959 - nodes in this community are weakly interconnected._

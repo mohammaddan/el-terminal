@@ -156,25 +156,6 @@ as a direct argv list (safe for spaces, Unicode, and shell-special characters).
 ?? how do I find large files under the current directory
 ```
 
-## Commit, push & release
-
-Bump `version` in `Cargo.toml` first (keep it in sync with the tag, e.g. `0.4.0` → tag `v0.4.0`). Then:
-
-```bash
-# Commit
-git status
-git add -A
-git commit -m "Release v0.4.0"
-
-# Push commits
-git push origin HEAD
-
-# Tag and push (triggers GitHub Actions release)
-git tag v0.4.0
-git push origin v0.4.0
-```
-
-Pushing a `v*` tag runs [`.github/workflows/release.yml`](.github/workflows/release.yml): it builds the Ubuntu `.deb` with `cargo deb` and uploads it to a GitHub Release (notes generated automatically).
 
 Optional checks before tagging:
 
