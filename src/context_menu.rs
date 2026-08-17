@@ -13,6 +13,8 @@ pub fn attach_context_menu(
 
     let tab_section = gio::Menu::new();
     tab_section.append(Some("New Tab"), Some("win.new-tab"));
+    tab_section.append(Some("Previous Tab"), Some("win.prev-tab"));
+    tab_section.append(Some("Next Tab"), Some("win.next-tab"));
     tab_section.append(Some("Close Tab"), Some("win.close-tab"));
     menu.append_section(None, &tab_section);
 
@@ -21,6 +23,13 @@ pub fn attach_context_menu(
     split_section.append(Some("Split Down"), Some("win.split-down"));
     split_section.append(Some("Close Pane"), Some("win.close-pane"));
     menu.append_section(None, &split_section);
+
+    let pane_section = gio::Menu::new();
+    pane_section.append(Some("Focus Left"), Some("win.focus-pane-left"));
+    pane_section.append(Some("Focus Right"), Some("win.focus-pane-right"));
+    pane_section.append(Some("Focus Up"), Some("win.focus-pane-up"));
+    pane_section.append(Some("Focus Down"), Some("win.focus-pane-down"));
+    menu.append_section(None, &pane_section);
 
     let popover = PopoverMenu::from_model(Some(&menu));
     popover.set_parent(terminal);
@@ -91,4 +100,38 @@ pub fn install_window_actions(
     let close_pane = gio::SimpleAction::new("close-pane", None);
     close_pane.connect_activate(move |_, _| on_close_pane());
     window.add_action(&close_pane);
+}
+
+pub fn install_navigation_actions(
+    window: &gtk4::ApplicationWindow,
+    on_prev_tab: impl Fn() + 'static,
+    on_next_tab: impl Fn() + 'static,
+    on_focus_left: impl Fn() + 'static,
+    on_focus_right: impl Fn() + 'static,
+    on_focus_up: impl Fn() + 'static,
+    on_focus_down: impl Fn() + 'static,
+) {
+    let prev_tab = gio::SimpleAction::new("prev-tab", None);
+    prev_tab.connect_activate(move |_, _| on_prev_tab());
+    window.add_action(&prev_tab);
+
+    let next_tab = gio::SimpleAction::new("next-tab", None);
+    next_tab.connect_activate(move |_, _| on_next_tab());
+    window.add_action(&next_tab);
+
+    let focus_left = gio::SimpleAction::new("focus-pane-left", None);
+    focus_left.connect_activate(move |_, _| on_focus_left());
+    window.add_action(&focus_left);
+
+    let focus_right = gio::SimpleAction::new("focus-pane-right", None);
+    focus_right.connect_activate(move |_, _| on_focus_right());
+    window.add_action(&focus_right);
+
+    let focus_up = gio::SimpleAction::new("focus-pane-up", None);
+    focus_up.connect_activate(move |_, _| on_focus_up());
+    window.add_action(&focus_up);
+
+    let focus_down = gio::SimpleAction::new("focus-pane-down", None);
+    focus_down.connect_activate(move |_, _| on_focus_down());
+    window.add_action(&focus_down);
 }

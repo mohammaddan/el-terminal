@@ -54,6 +54,13 @@ struct AppState {
     pending_cwd: RefCell<Option<String>>,
 }
 
+enum PaneDir {
+    Left,
+    Right,
+    Up,
+    Down,
+}
+
 pub fn build_ui(app: &Application) {
     let launch_opts = launch::take();
     if let Some(dir) = launch_opts.working_directory.as_deref() {
@@ -462,6 +469,8 @@ fn install_window_controls(
 fn install_menu(menu_btn: &gtk4::Button, state: &Rc<AppState>) {
     let menu = gio::Menu::new();
     menu.append(Some("New Tab"), Some("win.new-tab"));
+    menu.append(Some("Previous Tab"), Some("win.prev-tab"));
+    menu.append(Some("Next Tab"), Some("win.next-tab"));
     menu.append(Some("Close Tab"), Some("win.close-tab"));
     menu.append(Some("Split Right"), Some("win.split-right"));
     menu.append(Some("Split Down"), Some("win.split-down"));
@@ -562,6 +571,40 @@ fn install_actions(state: &Rc<AppState>) {
             move || close_active_pane(&state)
         ),
     );
+
+    context_menu::install_navigation_actions(
+        &state.window,
+        clone!(
+            #[strong]
+            state,
+            move || cycle_tab(&state, -1)
+        ),
+        clone!(
+            #[strong]
+            state,
+            move || cycle_tab(&state, 1)
+        ),
+        clone!(
+            #[strong]
+            state,
+            move || focus_pane_in_direction(&state, PaneDir::Left)
+        ),
+        clone!(
+            #[strong]
+            state,
+            move || focus_pane_in_direction(&state, PaneDir::Right)
+        ),
+        clone!(
+            #[strong]
+            state,
+            move || focus_pane_in_direction(&state, PaneDir::Up)
+        ),
+        clone!(
+            #[strong]
+            state,
+            move || focus_pane_in_direction(&state, PaneDir::Down)
+        ),
+    );
 }
 
 fn install_shortcuts(app: &Application, state: &Rc<AppState>) {
@@ -576,16 +619,64 @@ fn install_shortcuts(app: &Application, state: &Rc<AppState>) {
     app.set_accels_for_action("win.quit", &["<Control><Shift>q"]);
     app.set_accels_for_action("win.settings", &["<Control><Shift>comma"]);
     app.set_accels_for_action("win.ask", &["<Control><Shift>slash"]);
+    app.set_accels_for_action("win.prev-tab", &["<Control>Page_Up", "<Control>KP_Page_Up"]);
+    app.set_accels_for_action(
+        "win.next-tab",
+        &["<Control>Page_Down", "<Control>KP_Page_Down"],
+    );
+    app.set_accels_for_action("win.focus-pane-left", &["<Alt>Left", "<Alt>KP_Left"]);
+    app.set_accels_for_action("win.focus-pane-right", &["<Alt>Right", "<Alt>KP_Right"]);
+    app.set_accels_for_action("win.focus-pane-up", &["<Alt>Up", "<Alt>KP_Up"]);
+    app.set_accels_for_action("win.focus-pane-down", &["<Alt>Down", "<Alt>KP_Down"]);
 
-    // Ensure VTE doesn't swallow Ctrl+Shift shortcuts before window actions.
+    // Ensure VTE doesn't swallow window shortcuts before actions.
     let controller = EventControllerKey::new();
     controller.set_propagation_phase(gtk4::PropagationPhase::Capture);
     controller.connect_key_pressed(clone!(
         #[strong]
         state,
         move |_, key, _code, mods| {
-            let ctrl_shift = mods.contains(ModifierType::CONTROL_MASK)
-                && mods.contains(ModifierType::SHIFT_MASK);
+            let ctrl = mods.contains(ModifierType::CONTROL_MASK);
+            let shift = mods.contains(ModifierType::SHIFT_MASK);
+            let alt = mods.contains(ModifierType::ALT_MASK);
+
+            if ctrl && !shift && !alt {
+                match key {
+                    Key::Page_Up | Key::KP_Page_Up => {
+                        cycle_tab(&state, -1);
+                        return glib::Propagation::Stop;
+                    }
+                    Key::Page_Down | Key::KP_Page_Down => {
+                        cycle_tab(&state, 1);
+                        return glib::Propagation::Stop;
+                    }
+                    _ => {}
+                }
+            }
+
+            if alt && !ctrl {
+                match key {
+                    Key::Left | Key::KP_Left => {
+                        focus_pane_in_direction(&state, PaneDir::Left);
+                        return glib::Propagation::Stop;
+                    }
+                    Key::Right | Key::KP_Right => {
+                        focus_pane_in_direction(&state, PaneDir::Right);
+                        return glib::Propagation::Stop;
+                    }
+                    Key::Up | Key::KP_Up => {
+                        focus_pane_in_direction(&state, PaneDir::Up);
+                        return glib::Propagation::Stop;
+                    }
+                    Key::Down | Key::KP_Down => {
+                        focus_pane_in_direction(&state, PaneDir::Down);
+                        return glib::Propagation::Stop;
+                    }
+                    _ => {}
+                }
+            }
+
+            let ctrl_shift = ctrl && shift;
             if !ctrl_shift {
                 return glib::Propagation::Proceed;
             }
@@ -1004,6 +1095,73 @@ fn select_tab_by_name(state: &AppState, name: &str) {
         if let Some(pane) = tab.panes.iter().find(|p| p.id == focused) {
             pane.terminal.grab_focus();
         }
+    }
+}
+
+fn cycle_tab(state: &AppState, delta: isize) {
+    let tabs = state.tabs.borrow();
+    let n = tabs.len() as isize;
+    if n <= 1 {
+        return;
+    }
+    let next = (state.active.get() as isize + delta).rem_euclid(n) as usize;
+    let name = tabs[next].name.clone();
+    drop(tabs);
+    select_tab_by_name(state, &name);
+}
+
+fn focus_pane_in_direction(state: &AppState, dir: PaneDir) {
+    let tabs = state.tabs.borrow();
+    let Some(tab) = tabs.get(state.active.get()) else {
+        return;
+    };
+    if tab.panes.len() <= 1 {
+        return;
+    }
+    let focused = tab.focused.get();
+    let Some(current) = tab.panes.iter().find(|p| p.id == focused) else {
+        return;
+    };
+    let root = tab.root.clone();
+    let Some(origin) = current.terminal.compute_bounds(&root) else {
+        return;
+    };
+    let ox = origin.x() + origin.width() / 2.0;
+    let oy = origin.y() + origin.height() / 2.0;
+
+    let mut best: Option<(f32, Terminal)> = None;
+    for pane in &tab.panes {
+        if pane.id == focused {
+            continue;
+        }
+        let Some(bounds) = pane.terminal.compute_bounds(&root) else {
+            continue;
+        };
+        let px = bounds.x() + bounds.width() / 2.0;
+        let py = bounds.y() + bounds.height() / 2.0;
+        let dx = px - ox;
+        let dy = py - oy;
+        let on_side = match dir {
+            PaneDir::Right => dx > 0.0,
+            PaneDir::Left => dx < 0.0,
+            PaneDir::Down => dy > 0.0,
+            PaneDir::Up => dy < 0.0,
+        };
+        if !on_side {
+            continue;
+        }
+        let (primary, ortho) = match dir {
+            PaneDir::Left | PaneDir::Right => (dx.abs(), dy.abs()),
+            PaneDir::Up | PaneDir::Down => (dy.abs(), dx.abs()),
+        };
+        let score = primary + 2.0 * ortho;
+        if best.as_ref().map_or(true, |(s, _)| score < *s) {
+            best = Some((score, pane.terminal.clone()));
+        }
+    }
+    drop(tabs);
+    if let Some((_, terminal)) = best {
+        terminal.grab_focus();
     }
 }
 

@@ -15,7 +15,7 @@ Lightweight borderless terminal emulator for Linux (GTK4 + VTE), with optional O
 **Terminal**
 - Multi-tab sessions (each pane has its own PTY / `$SHELL`)
 - Split panes within a tab (resizable; nestable)
-- Right-click context menu: Copy, Paste, Select All, New Tab, Close Tab, Split Right/Down, Close Pane
+- Right-click context menu: Copy, Paste, Select All, New Tab, Previous/Next Tab, Split Right/Down, Close Pane, Focus Left/Right/Up/Down
 - Ctrl+scroll to zoom font size (persisted)
 
 **Settings** (`Ctrl+Shift+,` or menu → Settings…)
@@ -42,8 +42,10 @@ Lightweight borderless terminal emulator for Linux (GTK4 + VTE), with optional O
 | `Ctrl+Shift+C` / `V` | Copy / Paste |
 | `Ctrl+Shift+A` | Select all |
 | `Ctrl+Shift+T` | New tab |
+| `Ctrl+PageUp` / `PageDown` | Previous / next tab |
 | `Ctrl+Shift+W` | Close pane (or tab if last pane) |
 | `Ctrl+Shift+R` / `D` | Split right / down |
+| `Alt+Left` / `Right` / `Up` / `Down` | Focus pane in that direction |
 | `Ctrl+Shift+,` | Settings |
 | `Ctrl+Shift+/` | Toggle Ask panel |
 | `Ctrl+Shift+Q` | Quit |
