@@ -9,6 +9,7 @@ mod llm;
 mod settings;
 mod settings_ui;
 mod tab_bar;
+mod terminal_links;
 mod terminal_tab;
 
 use gtk4::gio;

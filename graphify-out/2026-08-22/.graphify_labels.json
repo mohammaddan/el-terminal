@@ -19,6 +19,5 @@
   "17": "postinst",
   "18": "postrm",
   "19": "prerm",
-  "20": "AppSettings",
-  "21": "terminal_links.rs"
+  "20": "AppSettings"
 }

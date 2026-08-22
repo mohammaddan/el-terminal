@@ -1,4 +1,5 @@
 use crate::settings::{AppSettings, ThemeStyle};
+use crate::terminal_links;
 use gtk4::gdk::RGBA;
 use gtk4::gio;
 use gtk4::prelude::*;
@@ -30,7 +31,7 @@ pub fn create_terminal_with(settings: &AppSettings, spawn: SpawnOpts) -> Termina
     terminal.set_size_request(0, 0);
     terminal.set_scrollback_lines(10_000);
     terminal.set_mouse_autohide(true);
-    terminal.set_allow_hyperlink(true);
+    terminal_links::setup(&terminal, &settings.style.accent_blue);
     terminal.set_cursor_blink_mode(vte4::CursorBlinkMode::On);
     terminal.set_clear_background(false);
 
@@ -115,8 +116,10 @@ pub fn feed_text(terminal: &Terminal, text: &str) {
 }
 
 /// Write bytes to the terminal display as if from the child (does not send to the PTY).
+/// URLs are styled with the theme link color and OSC 8 hyperlinks for click-to-open.
 pub fn feed_output(terminal: &Terminal, text: &str) {
-    terminal.feed(text.as_bytes());
+    let styled = terminal_links::linkify(text, &terminal_links::link_color_for(terminal));
+    terminal.feed(styled.as_bytes());
 }
 
 pub fn select_all(terminal: &Terminal) {

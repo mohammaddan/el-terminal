@@ -1,16 +1,16 @@
-# Graph Report - terminal-emulator  (2026-08-22)
+# Graph Report - terminal-emulator  (2026-08-17)
 
 ## Corpus Check
-- 184 files · ~99,870 words
+- 183 files · ~99,003 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 372 nodes · 787 edges · 22 communities (18 shown, 4 thin omitted)
+- 353 nodes · 751 edges · 21 communities (17 shown, 4 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `eb364104`
+- Built from commit: `8f172d38`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -35,7 +35,6 @@
 - [[_COMMUNITY_postrm|postrm]]
 - [[_COMMUNITY_prerm|prerm]]
 - [[_COMMUNITY_AppSettings|AppSettings]]
-- [[_COMMUNITY_terminal_links.rs|terminal_links.rs]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `AppState` - 39 edges
@@ -64,7 +63,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (22 total, 4 thin omitted)
+## Communities (21 total, 4 thin omitted)
 
 ### Community 0 - "terminal_tab.rs"
 Cohesion: 0.20
@@ -130,10 +129,6 @@ Nodes (4): bad(), ok(), run_cwd_case(), test-desktop-integration.sh script
 Cohesion: 0.14
 Nodes (24): AppSettings, bundled_themes_dirs(), default_ask_prefix(), default_theme_id(), default_theme_style(), load_theme_catalog(), load_theme_file(), load_themes_from_dir() (+16 more)
 
-### Community 21 - "terminal_links.rs"
-Cohesion: 0.20
-Nodes (17): find_escape_end(), is_url_char(), link_color_for(), linkify(), linkify_skips_existing_escape_sequences(), linkify_wraps_http_url_with_color_and_hyperlink(), normalize_uri(), open_uri() (+9 more)
-
 ## Knowledge Gaps
 - **11 isolated node(s):** `Features`, `Shortcuts`, `Dependencies`, `Build & run`, `CLI` (+6 more)
   These have ≤1 connection - possible missing edges or undocumented components.
@@ -143,11 +138,11 @@ Nodes (17): find_escape_end(), is_url_char(), link_color_for(), linkify(), linki
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `AppSettings` connect `AppSettings` to `terminal_tab.rs`, `Rc`, `Tab`, `build_ui`, `open_settings_dialog`?**
-  _High betweenness centrality (0.145) - this node is a cross-community bridge._
+  _High betweenness centrality (0.157) - this node is a cross-community bridge._
 - **Why does `TerminalContext` connect `env_context.rs` to `Rc`, `build_ui`?**
-  _High betweenness centrality (0.097) - this node is a cross-community bridge._
+  _High betweenness centrality (0.100) - this node is a cross-community bridge._
 - **Why does `AppState` connect `Tab` to `app.rs`, `Rc`, `AppSettings`?**
-  _High betweenness centrality (0.093) - this node is a cross-community bridge._
+  _High betweenness centrality (0.099) - this node is a cross-community bridge._
 - **What connects `Features`, `Shortcuts`, `Dependencies` to the rest of the system?**
   _11 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Rc` be split into smaller, more focused modules?**

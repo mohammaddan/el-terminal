@@ -5,6 +5,7 @@ use crate::launch;
 use crate::settings::{AppSettings, FONT_SIZE_MAX, FONT_SIZE_MIN};
 use crate::settings_ui;
 use crate::tab_bar;
+use crate::terminal_links;
 use crate::terminal_tab::{self, SpawnOpts};
 use gtk4::gdk::{self, Key, ModifierType};
 use gtk4::gio;
@@ -787,6 +788,7 @@ fn apply_settings_to_all(state: &AppState) {
         for pane in &tab.panes {
             terminal_tab::apply_font(&pane.terminal, &settings);
             terminal_tab::apply_palette(&pane.terminal, &settings.style);
+            terminal_links::set_link_color(&pane.terminal, &settings.style.accent_blue);
         }
     }
 }
@@ -911,6 +913,8 @@ fn add_tab(state: &Rc<AppState>) {
 }
 
 fn wire_pane(state: &Rc<AppState>, tab_name: &str, pane_id: u32, terminal: &Terminal) {
+    terminal_links::wire_clicks(terminal, &state.window);
+
     context_menu::attach_context_menu(
         terminal,
         clone!(
